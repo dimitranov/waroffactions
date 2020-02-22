@@ -1,0 +1,390 @@
+calendar.test.coff
+
+78 :         expect(eventBus.subscribe).not.toHaveBeenCalledWith(eventBus.events.STYLE_LOADED, jasmine.any(Function))
+
+
+eventBuss.coff
+  IMAGE_COLLECTION_MODELS_LOADED: 'image.collection.models.loaded'
+  CALENDAR_EVENT_PHOTO_DRAGGED_OUT: 'calendar.event.photo.dragged.out'
+  REMOVE_EVENT_IMAVE_ON_DRAG_IMAGE_OUT: 'remove.event.image.on.image.dragg.out'
+  UPDATED_CALENDAR_IMAGE_ASSIGNEMT: 'update.calendar.image.assignment'
+
+  applyevetnImagecom
+
+  25
+  @event.imageId = options.imageId or null
+    @event.uniqueProjectRef = options.uniqueProjectRef or null
+
+    34
+ # call event before deletion of assignment
+      @eventBus.publish @eventBus.events.UPDATED_CALENDAR_IMAGE_ASSIGNEMT,
+        action: 'remove'
+        imageAssignment: @projectEvents.getImageAssociation(@event.id)
+    42
+    @eventBus.publish @eventBus.events.UPDATED_CALENDAR_IMAGE_ASSIGNEMT,
+        action: 'add'
+        imageAssignment: @projectEvents.getImageAssociation(@event.id)
+
+        65 
+        imageId: event.imageId
+        uniqueProjectRef: event.uniqueProjectRef
+
+72 
+  imageId: event.imageId
+        uniqueProjectRef: event.uniqueProjectRef
+
+
+        SwapEventIMegsComan
+
+44 
+imageId: event.imageId
+
+50 imageId: event.imageId
+
+
+SwapWEllImageCOmm
+
+4 
+  constructor: (@projectService, @eventBus, @autofill, @modelAdapter, @imageCollection, @commandService, @magicSDKService) ->
+
+
+56
+if sourcePage.isGrid and destPage.isGrid
+      imageMediaId = @imageCollection.projectImages.filter((img) =>
+        img.imageId is options.source.imageId
+      )?[0]?.sflyId
+      unless imageMediaId?
+        imageMediaId = ''
+      @eventBus.publish @eventBus.events.CALENDAR_EVENT_PHOTO_DRAGGED_OUT,
+        pageNumber: options.pageNumber[0]
+        imageId: options.source.imageId
+        uniqueProjectRef: options.source.uniqueProjectRef
+        imageMediaId: imageMediaId
+
+
+        102
+        if sourcePage.isGrid and destPage.isGrid
+      params =
+        source:
+          imageId: options.source.imageId
+          uniqueProjectRef: options.source.uniqueProjectRef
+        pageNumber: options.pageNumber[0] # page numbers are the same on calendars (page.isGrid is true)
+        target:
+          imageId: options.target.imageId
+          uniqueProjectRef: options.target.uniqueProjectRef
+      # we need this operation so we can create image-event assignment
+      @commandService.execute 'AddWellImageCommand', params
+
+
+      153 SwapWellImageCommand.$inject = ['projectService', 'eventBus', 'autofill', 'modelAdapter', 'imageCollection', 'commandService',
+
+
+
+
+
+AddWellImageCommand
+
+
+169
+  # there are no photo associations, associate the first event by calling ApplyEventImageCommand
+    if associationsFound is no
+      additions =
+        targetsUniqueProjectRef: options.target.uniqueProjectRef
+      @_executeApplyEventImageCommand(eventsOnDay[0], page, additions)
+
+  _updateSwappedImageAssociation: (eventId, oldImageId, newImage
+
+  192
+ _executeApplyEventImageCommand: (event, page, options) ->
+    @eventImageOptions =
+      event: event
+      imageMediaId: @projectImage.sflyId
+      imageId: @projectImage.imageId
+      projectImageId: @projectImage.productImageID
+      pageNumber: page.surfaceNumber
+      uniqueProjectRef: options.targetsUniqueProjectRef
+      skipGridCellMutation: yes
+    @eventImageCommand = @commandFactory.getInstance('ApplyEventImageCommand', @eventImageOptions)
+    @eventImageCommand.execute(page, @eventImageOptions)
+
+
+updade calendarEventOCmma
+
+37     @projectService.currentProject.product.setEventsOnDate(events, date, event.prevDate)
+
+
+
+updateEventImageComma
+
+4  constructor: (@eventBus, @eventsService, @projectEvents, @calendarEventsImageService,
+    @projectService, @calendar, @calendarGrid) ->
+
+    41 
+
+
+unless options.isExecutedFromDateChange isnt yes
+      # remove the image from the call of the prev event date
+      @calendarEventsImageService.removeGridCellImage(@prevEvent)
+      imageAssociation.active = yes
+      # change the uniqueProjectRef of the association
+      gridPage = @calendar.findSurfaceForDate(@event.date)
+      gridCellImage = @calendarGrid.findImageAreaForDate(@event.date, gridPage)
+      oldUniqueProjectRef = imageAssociation.uniqueProjectRef
+      imageAssociation.uniqueProjectRef = gridCellImage?.uniqueProjectRef
+      # update
+      @projectEvents.updateImageAssociation(@event.id, imageAssociation)
+      @eventBus.publish @eventBus.events.UPDATED_CALENDAR_IMAGE_ASSIGNEMT,
+        action: 'update'
+        imageAssignment: imageAssociation
+        oldUniqueProjectRef: oldUniqueProjectRef
+      @calendarEventsImageService.setGridCellImage(@event)
+      @eventBus.publish @eventBus.events.CALENDAR_EVENT_UPDATED, @event
+      return
+
+
+70
+  'projectService', 'calendar', 'calendarGrid']
+
+
+ImmageColection
+
+26  if @values.projectImages?
+      # lisened for in Calendar.js
+      @eventBus.publish @eventBus.events.IMAGE_COLLECTION_MODELS_LOADED, @values.projectImages
+ 
+
+
+
+ projectEvents
+
+    42 publicDates
+
+  # add imageId to imageAssociationsMap entry that coresponds to an image from project's imageCollection
+  enchanceImageAssignements: (imageCollection) ->
+    if imageCollection? and imageCollection.length > 0
+      for key, value of @imageAssociationsMap
+        for index, image of imageCollection
+          if value.imageMediaId is image.sflyId
+            @imageAssociationsMap[key].imageId = image.imageId
+            break
+    @imageAssociationsMap
+
+  eventsMatchingEventDate: (eventToMatch) ->
+
+  94 
+    imageId: image.imageId
+      uniqueProjectRef: image.uniqueProjectRef
+
+      116
+
+      imageId: imageInformation.imageId
+      uniqueProjectRef: imageInformation.uniqueProjectRef
+
+      131
+
+      imageAssociation.imageId = imageInformation.imageId
+      imageAssociation.uniqueProjectRef = imageInformation.uniqueProjectRef
+
+
+Calnedar.coff
+
+21
+constructor: (@ModelInitializer, @pageFactory, @enums, @calendarGrid, @adaptiveLayoutService, @pageModelStrategy, @config,
+    @eventBus, @commandService, @navService, @calendarGridCellIteratorFactory, @projectEvents,
+    @imageCollection, @eventsService, @project) ->
+
+
+
+    27
+
+    @eventBus.subscribe @eventBus.events.CALENDAR_EVENT_PHOTO_DRAGGED_OUT, @_handleCellImageRemoved
+    @eventBus.subscribe @eventBus.events.IMAGE_COLLECTION_MODELS_LOADED, @_handleEventImageAssignemtEnchancing
+    @eventBus.subscribe @eventBus.events.UPDATED_CALENDAR_IMAGE_ASSIGNEMT, @_handleChangeCalendarImageAssociation
+ 
+
+
+
+
+ 350
+
+ getImageAssetByUniqueProjectRef: (containerId, gridPage) ->
+    @calendarGrid.getImageAssetByUniqueProjectRef(containerId, gridPage)
+
+  setEventsOnDate: (events, date, prevEventDate) ->
+    # Check if valid date and array
+    return unless Array.isArray(events) and date.constructor.prototype is Date.prototype
+    # Sort based on custom first, public second
+    events = events.sort (event) -> if event.visibility.indexOf('custom') is 0 then -1 else 1
+    gridPage = @findSurfaceForDate date
+    return unless gridPage?
+    # Find event text area, if it exists
+    newTextArea = @calendarGrid.findEventTextAreaForDate(date, gridPage)
+    eventDateForStyleExtrapolation = if prevEventDate? then prevEventDate else date
+    oldTextArea = @calendarGrid.findEventTextAreaForDate(eventDateForStyleExtrapolation, gridPage)
+    oldTextAreaBGAssets = @_getOldEventAreaEmbelishments(oldTextArea.gridCellIterator.getGridCellAssets())
+    if oldTextAreaBGAssets[0]? #[0] is the bg asset
+      @_removePrevGridEventEmbelishment(oldTextAreaBGAssets[0], gridPage.values)
+
+    if newTextArea.gridCellIterator?
+      # Update text
+      text = events.reduce((prev, event) ->
+        return prev unless event.name?
+        if prev is '' then event.name else "#{prev}" + "\n" + "#{event.name}"
+      , '')
+      @_updateGridCellEventText(newTextArea.gridCellIterator, newTextArea.matchingAsset,
+        text, date, gridPage, oldTextArea, prevEventDate)
+    return
+
+  _updateGridCellEventText: (gridCellIterator, eventTextArea, text, date, gridPage, oldTextArea, prevEventDate) ->
+    if text?.length is 0 and @calendarGrid.canDeflateGridCell(gridCellIterator, eventTextArea)
+      @calendarGrid.deflateGridCell(eventTextArea, gridCellIterator, gridPage)
+    else if text?.length > 0
+      @calendarGrid.inflateGridCell(gridCellIterator, gridPage) if @calendarGrid.canInflateGridCell(gridCellIterator)
+      unless eventTextArea?
+        match = (asset, matchParameters) ->
+          day = matchParameters[0]
+          asset.asset.assetType is asset.asset.constructor.TEXT_TYPE \
+            and asset.asset.guidanceText is "event-#{day}"
+        eventDateForStyleExtrapolation = if prevEventDate? then prevEventDate else date
+        eventTextArea = gridCellIterator.findGridCellAsset(match, [eventDateForStyleExtrapolation.getDate()])?.asset
+    if eventTextArea?
+      styles = JSON.parse JSON.stringify(eventTextArea.styles)
+      styles.verticalAlign = eventTextArea.verticalAlign
+      currentStyles = if oldTextArea.matchingAsset? then oldTextArea.matchingAsset.styles else styles
+      currentStyles.verticalAlign = oldTextArea.matchingAsset.verticalAlign
+      eventTextArea.updateTextWithWrapsAndStyle(text, [], no, currentStyles)
+
+  # get the asset of the olf event date BG
+  _getOldEventAreaEmbelishments: (gridAssets) ->
+    gridAssets.filter (asset) ->
+      asset.values.assetType is 'graphic' and asset.values.type is 'Embellishment' and
+        /-event-text-bg$/.test(asset.values.assetReference.assetId)
+
+  getDateForGridImageArea: (gridPage, imageAreaId) ->
+    return null unless gridPage.isGrid
+    if (day = @calendarGrid.getDayForGridImageArea(gridPage, imageAreaId))
+      result = @pageModelStrategy.parseSurfaceKeyForPage(gridPage)
+      return new Date(result.year, result.month - 1, day)
+    null
+
+  # get an old random date cell style (default calendar style)
+  _getDefaultCalendarEventStyles: (gridPage) ->
+    @calendarGrid.findEventTextAreaForDate(new Date(2018, 1, 13), gridPage)?.matchingAsset?.styles
+
+  _removeEmptyGridAssets: ->
+    @commandService.execute('RemoveEmptyGridAssetsCommand',
+      activePageNumber: @navService._selectedPageNumber)
+
+  # remove old event date BG asset
+  _removePrevGridEventEmbelishment: (asset, page) ->
+    if asset?
+      @commandService.execute 'RemoveEmbellishmentCommand',
+        offsets: [asset.values.container.xOffset, asset.values.container.yOffset]
+        uniqueProjectRef: asset.uniqueProjectRef
+        containerId: asset.values.container.id
+        assetId: asset.values.assetReference.assetId
+        isMetallic: asset.isMetallic
+        pageNumber: page.surfaceNumber
+
+  # Find the event from  witch we have dragged out the photo
+  _handleCellImageRemoved: (__, data) =>
+    # Plan A: Try geting the ID from imageAssociationMap
+    for key, value of @projectEvents.imageAssociationsMap
+      if value.uniqueProjectRef is data.uniqueProjectRef
+        eventId = key
+        event = @_getEventBuyId eventId
+        break
+    # Plan B: Try getting Event ID from repportingData - imageAssociationList
+    unless event?
+      eventId_fromReportingData = @_extractEventIdFromReportingDataImageAssignmentList data
+      if eventId_fromReportingData?
+        event = @_getEventBuyId eventId_fromReportingData
+    # if event is found - remove the image assigniment
+    if event?
+      @eventBus.publish @eventBus.events.REMOVE_EVENT_IMAVE_ON_DRAG_IMAGE_OUT, event
+
+  # finds event based on Id
+  _getEventBuyId: (eventId) ->
+    for index, ev of @eventsService.events
+      if ev.id is parseInt(eventId)
+        return ev
+
+  _handleEventImageAssignemtEnchancing: (__, data) =>
+    @projectEvents.enchanceImageAssignements(data)
+
+  # This method will get an action type and an image association and
+  # execute the action with the imageAssociation on the repporting data object
+  # so we can have eventId - info links when we save and reopen project
+  _handleChangeCalendarImageAssociation: (__, data) =>
+    ia = data.imageAssignment
+    key = 'imageAddignmentLinks'
+    currValue = @project.getReportingValue(key) # get old
+    newEntry = "#{ia.eventId}---#{ia.imageMediaId}---#{ia.imageId}---#{ia.uniqueProjectRef}*** " # create the new entry
+    _update = (val) =>
+      @project.removeReportingProperty(key) # delete old
+      @project.setReportingValue(key, val) # update
+    switch data.action
+      when 'add'
+        if currValue? and currValue.indexOf(newEntry) is -1 # if we have current and new is not there
+          newEntry = currValue + newEntry # update
+        _update(newEntry)
+      when 'update'
+        if currValue? and data.oldUniqueProjectRef? # if we have current and we have oldUniqueProjectRef
+          # create the old entry
+          oldEntry =  "#{ia.eventId}---#{ia.imageMediaId}---#{ia.imageId}---#{data.oldUniqueProjectRef}*** "
+          newValue = currValue.replace(oldEntry, newEntry) # replace old with new
+          _update(newValue)
+      when 'remove'
+        if currValue? and currValue.indexOf(newEntry) isnt -1 # check if we have value  and if new event Exists
+          newValue = currValue.replace(newEntry, '') # remove new
+          _update(newValue)
+
+  # Extract the eventId from imageAddignmentLinks value from reportingData object
+  # initialy will be a big string in the following format
+  #     "#{eventId}---#{imageMediaId}---#{imageId}---#{uniqueProjectRef}*** " + "...more of the same for each event"
+  _extractEventIdFromReportingDataImageAssignmentList: (data) ->
+    key = 'imageAddignmentLinks'
+    value = @project.getReportingValue(key)
+    if value?
+      assignmentsArray = value.split '*** '
+      for index, val of assignmentsArray
+        if val.indexOf(data.uniqueProjectRef) isnt -1 and
+        val.indexOf(data.imageMediaId) isnt -1 and val.indexOf(data.imageId) isnt -1
+          return val.split('---')?[0]
+
+  _hasAccessory: (key) ->
+
+
+  eventsService
+  387
+
+  imageId: event.imageId
+    uniqueProjectRef: event.uniqueProjectRef
+
+
+
+    438
+    imageId: event.imageId
+
+    446
+    imageId: event.imageId
+      uniqueProjectRef: event.uniqueProjectRef
+
+
+calendarEventsImageService
+14     @eventBus.subscribe @eventBus.events.REMOVE_EVENT_IMAVE_ON_DRAG_IMAGE_OUT, (__, event) =>
+      @removeEventPhotoAssignment(event)
+
+
+      221 imageId: event.imageId
+        uniqueProjectRef: event.uniqueProjectRef
+
+        228
+        imageId: event.imageId
+        uniqueProjectRef: event.uniqueProjectRef
+
+
+        EventEditinService
+
+        101 @editEventModel.prevDate = @originalEventBeingEdited.date
+    @originalEventBeingEdited.prevDate = @originalEventBeingEdited.date

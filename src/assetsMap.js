@@ -1,0 +1,143 @@
+const baseeic = {
+    name: 'null',
+    hp: null,
+    baseDMG: null,
+    top: null,
+    left: null,
+    imageURL:  'null',
+    rage: null
+}
+
+export const ASSETS = {
+    Dwarfs: {
+        base: './images/Dwarfs.png',
+        Urvald: {
+            unitType: 'RageUnit',
+            name: 'Urvald',
+            hp: 1000,
+            baseDMG: 50,
+            top: 2,
+            left: 3,
+            imageURL:  'https://units.wesnoth.org/1.5.2/pics/00021_steelclad.png',
+        },
+        Herion: {
+            unitType: 'RageUnit',
+            name: 'Herion',
+            hp: 300,
+            baseDMG: 20,
+            top: 2,
+            left: 6,
+            imageURL:  'https://units.wesnoth.org/1.5.2/pics/00024_stalwart.png',
+        },
+        Korvuld: {
+            unitType: 'RageUnit',
+            name: 'Korvuld',
+            hp: 300,
+            baseDMG: 30,
+            top: 2,
+            left: 4,
+            imageURL:  'https://units.wesnoth.org/1.5.2/pics/00027_thunderer.png',
+        },
+        Mormond: {
+            unitType: 'RageUnit',
+            name: 'Mormond',
+            hp: 300,
+            baseDMG: 30,
+            top: 2,
+            left: 5,
+            imageURL:  'https://units.wesnoth.org/1.5.2/pics/00028_thunderguard.png',
+        },
+        Qamok: {
+            unitType: 'RageUnit',
+            name: 'Qamok',
+            hp: 300,
+            baseDMG: 30,
+            top: 2,
+            left: 7,
+            imageURL:  'https://units.wesnoth.org/1.5.2/pics/00031_berserker.png',
+        }
+
+        // Herion: 'https://units.wesnoth.org/1.5.2/pics/00024_stalwart.png',
+        // Korvuld: 'https://units.wesnoth.org/1.5.2/pics/00027_thunderer.png',
+        // Mormond: 'https://units.wesnoth.org/1.5.2/pics/00028_thunderguard.png',
+        // Qamok: 'https://units.wesnoth.org/1.5.2/pics/00031_berserker.png'
+    },
+    Elves: {
+        base: './images/Elves.png',
+        Euvion: {
+            unitType: 'ManaUnit',
+            name: 'Euvion',
+            hp: 300,
+            baseDMG: 30,
+            top: 5,
+            left: 2,
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00052_enchantress.png',
+        },
+        Lemro: {
+            unitType: 'ManaUnit',
+            name: 'Lemro',
+            hp: 300,
+            baseDMG: 30,
+            top: 5,
+            left: 3,
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00035_ranger.png',
+        },
+        Xavius: {
+            unitType: 'ManaUnit',
+            name: 'Xavius',
+            hp: 300,
+            baseDMG: 30,
+            top: 5,
+            left: 4,
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00040_hero.png',
+        },
+        Lotnom: {
+            unitType: 'ManaUnit',
+            name: 'Lotnom',
+            hp: 300,
+            baseDMG: 30,
+            top: 5,
+            left: 5,
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00046_rider.png',
+        },
+        Sorcela: {
+            unitType: 'ManaUnit',
+            name: 'Sorcela',
+            hp: 300,
+            baseDMG: 30,
+            top: 5,
+            left: 6,
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00051_sorceress.png',
+        },
+        Rengela: {
+            unitType: 'ManaUnit',
+            name: 'Rengela',
+            hp: 300,
+            baseDMG: 30,
+            top: 5,
+            left: 8,
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00049_druid.png',
+        }
+    },
+    Orcs: {
+        base: './images/Orcs.png',
+        Korgok: {
+            unitType: 'EnergyUnit',
+            name: 'Korgok',
+            hp: 400,
+            baseDMG: 40,
+            top: 3,
+            left: 8,
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00158_slayer.png',
+        },
+        Gromgash: {
+            unitType: 'EnergyUnit',
+            name: 'Gromgash',
+            hp: 400,
+            baseDMG: 40,
+            top: 3,
+            left: 4,
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00159_grunt.png',
+        },
+    }
+};
