@@ -2,7 +2,7 @@ import { ASSETS } from '../../assetsMap.js'
 import ManaUnit from './ManaUnit.js';
 import RageUnit from './RageUnit.js';
 import EnergyUnit from './EnergyUnit.js';
-import Unit from '../Unit.js';
+import Unit from './Unit.js';
 
 export default class UnitFactory {
     constructor(platform) {

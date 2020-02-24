@@ -1,4 +1,4 @@
-import { ASSETS } from '../assetsMap.js'
+import { ASSETS } from '../../assetsMap.js'
 
 export default class UnitSelectionPanel {
     constructor(player, platform) {
@@ -12,7 +12,7 @@ export default class UnitSelectionPanel {
 
         this.currentSelectedFaction = null;
         this.locked = false;
-    }   
+    }
 
     static lockedPlayersMap = {};
 
@@ -94,13 +94,13 @@ export default class UnitSelectionPanel {
         this._addEventListenersForUnitSelect();
     }
 
-    _onUnitSelectFromPool = e => {   
+    _onUnitSelectFromPool = e => {
         const unitName = e.currentTarget.dataset.unitName;
-        
+
         if (this.player.hasUnit(unitName)) {
             e.currentTarget.classList.remove('selectedUnit');
             this.player.deselectUnit(unitName);
-        } else if (this.player.units.length < 3){
+        } else if (this.player.units.length < 3) {
             e.currentTarget.classList.add('selectedUnit');
             this.player.setUnit(unitName);
         }

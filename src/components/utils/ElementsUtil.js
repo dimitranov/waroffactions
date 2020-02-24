@@ -1,5 +1,11 @@
 let instance = null;
+
 class ElementsUtil {
+    constructor() {
+        this.supportedElements = ['div', 'p', 'span', 'img', 'button'];
+        this.initElementCreationalMethods();
+    }
+
     static getInstance() {
         if (instance) {
             return instance;
@@ -7,6 +13,14 @@ class ElementsUtil {
         instance = new ElementsUtil();
         window.ElementsUtil = instance
         return instance;
+    }
+
+    initElementCreationalMethods() {
+        for (const element of this.supportedElements) {
+            this[element] = (options, html) => {
+                return new ElementFactory(element, options, html);
+            }
+        }
     }
 
     get(query, shouldGetAll) {
@@ -32,8 +46,10 @@ class ElementsUtil {
 
     }
 
-    createElement(type, options) {
-        return new ElementFactory(type, options);
+    createMethod = (methodName) => {
+        return (options, html) => {
+            return new ElementFactory(methodName, options, html);
+        }
     }
 
     on(query, action, cb) {
@@ -44,9 +60,10 @@ class ElementsUtil {
 }
 
 class ElementFactory {
-    constructor(type, options) {
+    constructor(type, options, html) {
         this.type = type;
         this.options = options;
+        this.html = html;
 
         return this.build();
     }
@@ -66,7 +83,7 @@ class ElementFactory {
                 }
             }
         }
-        
+
         if (this.options.class) {
             if (typeof this.options.class === 'string') {
                 element.classList.add(this.options.class);
@@ -76,7 +93,13 @@ class ElementFactory {
                 })
             }
         }
-    
+
+        if (typeof this.html === 'string') {
+            element.innerHTML = this.html;
+        } else if (Array.isArray(this.html)) {
+            element.append(...this.html);
+        }
+
         return element;
     }
 }

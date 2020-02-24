@@ -1,4 +1,4 @@
-import ElementsUtil from './utils/ElementsUtil.js'
+import ElementsUtil from '../utils/ElementsUtil.js'
 
 export default class Unit {
     constructor({ name, hp, baseDMG, top, left, imageURL }, platform, player) {
@@ -29,7 +29,7 @@ export default class Unit {
     _init = () => {
         const cords = this.platform.offsetMap[this.left][this.top];
 
-        this.element = ElementsUtil.createElement('div', {
+        this.element = ElementsUtil.div({
             class: ['unit', this.name],
             style: {
                 top: cords.top + 'px',
@@ -53,18 +53,18 @@ export default class Unit {
         // this.element.dataset.left = this.left;
         // this.element.dataset.player = this.player;
 
-        this.imgEL = ElementsUtil.createElement('img', {
+        this.imgEL = ElementsUtil.img({
             src: this.image,
             style: {
                 animationDelay: Math.floor(Math.random() * 10) + '00ms'
             }
         });
-        
+
         // this.imgEL = document.createElement('img');
         // this.imgEL.src = this.image;
         // this.imgEL.style.animationDelay = Math.floor(Math.random() * 10) + '00ms';
 
-        this.healthEL = ElementsUtil.createElement('div', {
+        this.healthEL = ElementsUtil.div({
             class: 'healthEL',
             style: {
                 height: (this.hp * 0.25) + 'px'
@@ -75,14 +75,14 @@ export default class Unit {
         // this.healthEL.className = 'healthEL';
         // this.healthEL.style.height = (this.hp * 0.25) + 'px';
 
-        this.takeDamageEL = ElementsUtil.createElement('div', {
+        this.takeDamageEL = ElementsUtil.div({
             class: 'takeDamageEL',
         });
 
         // this.takeDamageEL = document.createElement('div');
         // this.takeDamageEL.className = 'takeDamageEL';
-        
-        this.detailsEL = ElementsUtil.createElement('div', {
+
+        this.detailsEL = ElementsUtil.div({
             class: 'detailsEL',
         });
 
@@ -91,7 +91,7 @@ export default class Unit {
 
         this.details = this._getGeneralDetails(this);
         this._setDetailsContentToElement();
-        
+
         this.element.append(this.imgEL, this.healthEL, this.detailsEL, this.takeDamageEL);
 
         this.platform.platformEL.appendChild(this.element);
@@ -197,7 +197,7 @@ export default class Unit {
                 }, 250);
             }
                 break;
-            default: {};
+            default: { };
         }
 
 

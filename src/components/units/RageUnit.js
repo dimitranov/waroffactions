@@ -1,4 +1,4 @@
-import Unit from '../Unit.js';
+import Unit from './Unit.js';
 
 export default class RageUnit extends Unit {
     constructor({ name, hp, baseDMG, top, left, imageURL }, platform, player) {

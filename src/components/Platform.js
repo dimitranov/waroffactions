@@ -1,9 +1,10 @@
-import UnitSelectionPanel from './UnitSelectionPanel.js';
-import UnitsMediator from './UnitsMediator.js';
+import UnitSelectionPanel from './units/UnitSelectionPanel.js';
+import UnitsMediator from './units/UnitsMediator.js';
 import UnitBuilder from './units/UnitBuilder.js';
-import PlayerMediator from './PlayerMediator.js';
+import PlayerMediator from './players/PlayerMediator.js';
+import PlayerRegistration from './players/PlayerRegistration.js'
 
-import Player from './Player.js';
+import Player from './players/Player.js';
 
 export default class Platform {
     constructor(width, height) {
@@ -23,13 +24,14 @@ export default class Platform {
 
         this.unitMediatorMap = {};
         this.UnitBuilder = new UnitBuilder();
-        this.playerMediator = new PlayerMediator(['Dimi', 'Georgi']);
+        this.initPlayerRegistration()
+        // this.playerMediator = new PlayerMediator(['Dimi', 'Georgi']);
     }
 
     handleStartGame() {
         if (!this.gameLocked) {
             this._activateGameStartAnimation();
-            // const elel = ElementsUtil.createElement('div', {
+            // const elel = ElementsUtil.div({
             //     class: 'koko',
             //     id: '1312',
             //     dataset: {
@@ -37,7 +39,7 @@ export default class Platform {
             //         dsda: '22'
             //     }
             // });
-            
+
             this.playerUnitsArrayMap[this.playerMediator.activePlayer.name] = this.playerMediator.activePlayer.units;
             this.playerUnitsArrayMap[this.playerMediator.enemyPlayer.name] = this.playerMediator.enemyPlayer.units;
 
@@ -76,6 +78,15 @@ export default class Platform {
                 });
             }
         }
+    }
+
+    initPlayerRegistration() {
+        const newPlayerRegistration = new PlayerRegistration(this);
+        newPlayerRegistration.activate();
+    }
+
+    initPlayerMediator(playersArray) {
+        this.playerMediator = new PlayerMediator(['Dimi', 'Georgi']);
     }
 
     unlockGame() {

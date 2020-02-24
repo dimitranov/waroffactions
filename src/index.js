@@ -2,7 +2,7 @@ import Platform from './components/Platform.js';
 import ElementsUtil from './components/utils/ElementsUtil.js';
 // import './styles.css'
 
-const elel = ElementsUtil.createElement('div', {
+const elel = ElementsUtil.div({
     class: 'koko',
     id: '1312',
     dataset: {
@@ -20,7 +20,7 @@ console.dir(elel);
 const platform = new Platform(800, 800);
 
 platform.drawMap();
-platform.handleUnitSelectionStage();
+// platform.handleUnitSelectionStage();
 
 // platform.handleStartGame();
 
@@ -40,7 +40,7 @@ platform.handleUnitSelectionStage();
     WAR OF FACTIONS
 
     1 v 1 - Turn base strategy game
-    
+
     Each pick a faction in the beginning (Dwarfs, Elves, Orcs, Humans, Undead).
     Each user has HP (will be decided if it will be <3 based or number based).
     Each time a unit dies the Player Hp is Lowered.
@@ -53,7 +53,7 @@ platform.handleUnitSelectionStage();
     Essences Cluster: If an players unit reached the cluster, the player gets to Buy one Unit from the pool.
     Health Crystal: If an players unit reaches the crystal, the player gets his HP rejuvenated with a particular amount.
 
-    During the units life on the game map, each faction has specific bonuses based on the map position they are 
+    During the units life on the game map, each faction has specific bonuses based on the map position they are
     e.g (Dwarfs have increased HP on a mountain terrain, Elves have Increased DMG on forest terrain )
 
     Winning: If HP of opponent reaches zero or he leaves with no units on the map
