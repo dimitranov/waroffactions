@@ -1,13 +1,15 @@
 import { ASSETS } from '../../assetsMap.js'
 
 export default class UnitSelectionPanel {
-    constructor(player, platform) {
+    constructor(player, platform, unitSelectionModal) {
         this.player = player;
         this.platform = platform;
+        this.unitSelectionModal = unitSelectionModal;
         this.playerName = this.player.name;
 
         this.element = document.createElement('div');
         this.element.classList.add('playerPanel');
+        this.element.id = 'playerPanel';
         this._renderFactionAndUnitPicking();
 
         this.currentSelectedFaction = null;
@@ -15,6 +17,8 @@ export default class UnitSelectionPanel {
     }
 
     static lockedPlayersMap = {};
+
+    static playerFactionSelectCount = 0;
 
     _renderLockedPanel() {
         let selectedUnits = '';
@@ -74,7 +78,7 @@ export default class UnitSelectionPanel {
 
     _renderFactionAndUnitPicking() {
         this.element.innerHTML = `
-            <h1 contenteditable>${this.playerName}</h1>
+            <h1>${this.playerName}</h1>
             ${this.currentSelectedFaction ? `<p class="factionTitle">${this.currentSelectedFaction}</p>` : ''}
             <div class="pool">
                 ${this.locked ? this._renderLockedPanel() : ''}
@@ -88,6 +92,10 @@ export default class UnitSelectionPanel {
     _onFactionSelect = e => {
         this.currentSelectedFaction = e.currentTarget.dataset.faction;
         this.player.setFaction(this.currentSelectedFaction);
+        UnitSelectionPanel.playerFactionSelectCount += 1;
+        if (UnitSelectionPanel.playerFactionSelectCount === 2) {
+            this.unitSelectionModal.changeTitle('Select your HEROS')
+        }
         this._renderFactionAndUnitPicking();
         this._addListenerForReturnToFactionPanel();
         this._addEventListenerForLock();

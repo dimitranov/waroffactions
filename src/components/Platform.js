@@ -1,8 +1,14 @@
 import UnitSelectionPanel from './units/UnitSelectionPanel.js';
 import UnitsMediator from './units/UnitsMediator.js';
 import UnitBuilder from './units/UnitBuilder.js';
+import UnitSelectionModal from './units/UnitSelectionModal.js';
 import PlayerMediator from './players/PlayerMediator.js';
-import PlayerRegistration from './players/PlayerRegistration.js'
+import PlayerRegistrationModal from './players/PlayerRegistrationModal.js';
+
+
+import ModalUtil from './utils/ModalUtil.js';
+import Element from './utils/ElementsUtil.js';
+
 
 import Player from './players/Player.js';
 
@@ -24,21 +30,14 @@ export default class Platform {
 
         this.unitMediatorMap = {};
         this.UnitBuilder = new UnitBuilder();
-        this.initPlayerRegistration()
-        // this.playerMediator = new PlayerMediator(['Dimi', 'Georgi']);
+        // this.initPlayerRegistrationModal()
+        this.playerMediator = new PlayerMediator(['Dimi', 'Georgi']);
+        this.initHeroPoolSelection();
     }
 
     handleStartGame() {
         if (!this.gameLocked) {
             this._activateGameStartAnimation();
-            // const elel = ElementsUtil.div({
-            //     class: 'koko',
-            //     id: '1312',
-            //     dataset: {
-            //         koko: 1,
-            //         dsda: '22'
-            //     }
-            // });
 
             this.playerUnitsArrayMap[this.playerMediator.activePlayer.name] = this.playerMediator.activePlayer.units;
             this.playerUnitsArrayMap[this.playerMediator.enemyPlayer.name] = this.playerMediator.enemyPlayer.units;
@@ -80,16 +79,24 @@ export default class Platform {
         }
     }
 
-    initPlayerRegistration() {
-        const newPlayerRegistration = new PlayerRegistration(this);
-        newPlayerRegistration.activate();
+    initPlayerRegistrationModal() {
+        this.newPlayerRegistrationModal = new PlayerRegistrationModal(this);
+        this.newPlayerRegistrationModal.activate();
     }
 
     initPlayerMediator(playersArray) {
-        this.playerMediator = new PlayerMediator(['Dimi', 'Georgi']);
+        this.playerMediator = new PlayerMediator(playersArray);
+        this.newPlayerRegistrationModal.close();
+        this.initHeroPoolSelection();
+    }
+
+    initHeroPoolSelection() {
+        this.unitSelectionModal = new UnitSelectionModal(this, this.playerMediator);
+        this.unitSelectionModal.activate();
     }
 
     unlockGame() {
+        this.unitSelectionModal.close();
         this.gameLocked = false;
     }
 

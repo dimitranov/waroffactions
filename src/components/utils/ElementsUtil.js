@@ -71,26 +71,28 @@ class ElementFactory {
     build() {
         const element = document.createElement(this.type);
 
-        for (const attribute of Object.keys(this.options)) {
-            if (attribute !== 'class') {
-                if (typeof this.options[attribute] === 'object') {
-                    for (const key of Object.keys(this.options[attribute])) {
-                        element[attribute][key] = this.options[attribute][key];
+        if (this.options) {
+            for (const attribute of Object.keys(this.options)) {
+                if (attribute !== 'class') {
+                    if (typeof this.options[attribute] === 'object') {
+                        for (const key of Object.keys(this.options[attribute])) {
+                            element[attribute][key] = this.options[attribute][key];
+                        }
+                    }
+                    if (typeof this.options[attribute] === 'string' || typeof this.options[attribute] === 'number') {
+                        element[attribute] = this.options[attribute];
                     }
                 }
-                if (typeof this.options[attribute] === 'string' || typeof this.options[attribute] === 'number') {
-                    element[attribute] = this.options[attribute];
-                }
             }
-        }
 
-        if (this.options.class) {
-            if (typeof this.options.class === 'string') {
-                element.classList.add(this.options.class);
-            } else if (Array.isArray(this.options.class)) {
-                this.options.class.forEach(className => {
-                    element.classList.add(className);
-                })
+            if (this.options.class) {
+                if (typeof this.options.class === 'string') {
+                    element.classList.add(this.options.class);
+                } else if (Array.isArray(this.options.class)) {
+                    this.options.class.forEach(className => {
+                        element.classList.add(className);
+                    })
+                }
             }
         }
 

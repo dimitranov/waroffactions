@@ -6,14 +6,24 @@ export default class ModalUtil {
         this.html = config.html;
         this.buttons = config.buttons;
 
-        this.generateModal();
+        this.renderModal();
     }
 
-    insertModalContent() {
-
+    showValidationError(errMgs) {
+        this.validationError = Element.p({
+            class: 'modal-error'
+        }, errMgs);
+        this.modalEl.appendChild(this.validationError);
+        setTimeout(() => {
+            this.modalEl.remove(this.validationError);
+        }, 4000);
     }
 
-    generateModal() {
+    changeTitle(newTitle) {
+        document.querySelector('.modal-header .fdsafds').innerHTML = newTitle;
+    }
+
+    renderModal() {
         const buttonElements = [];
         for (const button of this.buttons) {
             const btn = Element.button({
@@ -24,25 +34,39 @@ export default class ModalUtil {
             buttonElements.push(btn);
         }
 
-        this.modalHealderEl = Element.div({ class: 'modal-header' }, `
+        this.modalHeaderEl = Element.div({ class: 'modal-header' }, `
         <div class='fdsafds'>
             ${this.title}
         </div>`);
 
+        this.modalContent = Element.div({ class: 'modal-content' }, this.html);
+
         this.modalFooterEl = Element.div({ class: 'modal-footer' }, [...buttonElements]);
 
-        this.modalEl = ElementsUtil.div({
+        this.modalContainer = Element.div({ class: 'modal-container' }, [
+            this.modalHeaderEl,
+            this.modalContent,
+            this.modalFooterEl
+        ])
+
+        this.modalEl = Element.div({
             class: 'modal',
             id: 'modal-dialog-container'
-        }, [
-            this.modalHealderEl,
-            this.modalFooterEl
-        ]);
+        }, [ this.modalContainer ]);
 
         // this.modalEl.innerHTML = `<div>
         //     HI  there 
         // </div>`
+        // document.body.appendChild(this.modalEl);
+    }
+
+    show() {
         document.body.appendChild(this.modalEl);
+    }
+
+    hide() {
+        this.modalEl.style.display = 'none';
+        this.modalEl.remove();
     }
 
 
