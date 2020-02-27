@@ -44,11 +44,17 @@ export default class UnitSelectionModal {
         this.modal.changeTitle(title);
     }
 
+    notifyForFactionSelect(factinSelected, playerName) {
+        const opositePanel = this._getOpositePlayerPanelBuyPlayerName(playerName);
+        opositePanel.acceptSelectionNotification(factinSelected);
+    }
+
+    _getOpositePlayerPanelBuyPlayerName(playerName) {
+        return this.unitSelectionPanels.find(up => up.playerName !== playerName);
+    }
+
     onHandleStartGameSession = () => {
-        console.log('click start game');
-        
         if (this.unitSelectionPanels[0].locked && this.unitSelectionPanels[1].locked) {
-            // ready to start game 
             this.platform.unlockGame();
             this.platform.handleStartGame();
         }

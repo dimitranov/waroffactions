@@ -43,15 +43,6 @@ export default class Unit {
             }
         });
 
-        // this.element = document.createElement('div');
-        // this.element.style.top = cords.top + 'px';
-        // this.element.style.left = cords.left + 'px';
-        // this.element.classList.add('unit');
-        // this.element.classList.add(this.name);
-        // this.element.dataset.name = this.name;
-        // this.element.dataset.top = this.top;
-        // this.element.dataset.left = this.left;
-        // this.element.dataset.player = this.player;
 
         this.imgEL = ElementsUtil.img({
             src: this.image,
@@ -60,9 +51,6 @@ export default class Unit {
             }
         });
 
-        // this.imgEL = document.createElement('img');
-        // this.imgEL.src = this.image;
-        // this.imgEL.style.animationDelay = Math.floor(Math.random() * 10) + '00ms';
 
         this.healthEL = ElementsUtil.div({
             class: 'healthEL',
@@ -71,23 +59,15 @@ export default class Unit {
             }
         });
 
-        // this.healthEL = document.createElement('div');
-        // this.healthEL.className = 'healthEL';
-        // this.healthEL.style.height = (this.hp * 0.25) + 'px';
-
         this.takeDamageEL = ElementsUtil.div({
             class: 'takeDamageEL',
         });
 
-        // this.takeDamageEL = document.createElement('div');
-        // this.takeDamageEL.className = 'takeDamageEL';
 
         this.detailsEL = ElementsUtil.div({
             class: 'detailsEL',
         });
 
-        // this.detailsEL = document.createElement('div');
-        // this.detailsEL.className = 'detailsEL';
 
         this.details = this._getGeneralDetails(this);
         this._setDetailsContentToElement();
@@ -342,6 +322,8 @@ export default class Unit {
                 }
             }
         });
+
+        console.log(this.reachableSquaresAttackable)
 
         Array.from(document.querySelectorAll('.unit.onTurn')).forEach((e) => {
             e.classList.remove('onTurn');

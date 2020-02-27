@@ -20,7 +20,8 @@ export default class Platform {
 
         this.unitPool = document.getElementById('unitPool');
 
-        this.gameLocked = true;
+        // this.gameLocked = true;
+        this.gameLocked = false;
 
         this.offsetMap = []; // 340x670px
         this.cordsMap = []; // 3x4
@@ -30,9 +31,9 @@ export default class Platform {
 
         this.unitMediatorMap = {};
         this.UnitBuilder = new UnitBuilder();
-        // this._initPlayerRegistrationModal()
+        // this._initPlayerRegistrationModal();
         this.playerMediator = new PlayerMediator(['Dimi', 'Georgi']);
-        this._initHeroPoolSelection();
+        // this._initHeroPoolSelection();
     }
 
     handleStartGame() {
@@ -42,10 +43,10 @@ export default class Platform {
             this.playerUnitsArrayMap[this.playerMediator.activePlayer.name] = this.playerMediator.activePlayer.units;
             this.playerUnitsArrayMap[this.playerMediator.enemyPlayer.name] = this.playerMediator.enemyPlayer.units;
 
-            // this.playerUnitsArrayMap = {
-            //     Dimi: ["Urvald", "Mormond"],
-            //     Georgi: ["Euvion", "Lemro"],
-            // };
+            this.playerUnitsArrayMap = {
+                Dimi: ["Urvald", "Mormond"],
+                Georgi: ["Euvion", "Lemro"],
+            };
 
             const activePlayer = this.playerMediator.activePlayer;
             const enemyPlayer = this.playerMediator.enemyPlayer;

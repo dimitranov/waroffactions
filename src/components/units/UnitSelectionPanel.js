@@ -1,4 +1,5 @@
 import { ASSETS } from '../../assetsMap.js'
+import Element from '../utils/ElementsUtil.js';
 
 export default class UnitSelectionPanel {
     constructor(player, platform, unitSelectionModal) {
@@ -13,6 +14,7 @@ export default class UnitSelectionPanel {
 
         this._renderFactionPicking();
 
+        this.disabledFaction = null;
         this.currentSelectedFaction = null;
         this.locked = false;
     }
@@ -80,14 +82,14 @@ export default class UnitSelectionPanel {
             </div>
         `;
     }
-    
+
     _renderHeroesPicking() {
         this.element.innerHTML = `
             <h1>${this.playerName}</h1>
             <p class="factionTitle">${this.currentSelectedFaction}</p>
             <div class="pool">
                 ${!this.locked ? this._renderUnitsPool(this.currentSelectedFaction) : this._renderLockedPanel()}
-                ${!this.locked ? `<button class="lockSelectionBTN" data-lock-selected-hero="${this.playerName}">lock</button>` : '' }
+                ${!this.locked ? `<button class="lockSelectionBTN" data-lock-selected-hero="${this.playerName}">lock</button>` : ''}
             </div>
         `;
     }
@@ -97,13 +99,16 @@ export default class UnitSelectionPanel {
     _onFactionClick = e => {
         const newClickedFaction = e.currentTarget.dataset.faction;
 
-        e.currentTarget.classList.add('selectedUnit');
-        if (this.currentSelectedFaction && newClickedFaction !== this.currentSelectedFaction) {
-            // change classes and unselect
-            document.querySelector(`div[data-faction="${this.currentSelectedFaction}"][data-faction-of-player="${this.playerName}"]`)
-                .classList.remove('selectedUnit');
+        if (newClickedFaction !== this.disabledFaction) {
+            e.currentTarget.classList.add('selectedUnit');
+            if (this.currentSelectedFaction && newClickedFaction !== this.currentSelectedFaction) {
+                // change classes and unselect
+                document.querySelector(`div[data-faction="${this.currentSelectedFaction}"][data-faction-of-player="${this.playerName}"]`)
+                    .classList.remove('selectedUnit');
+            }
+            this.currentSelectedFaction = newClickedFaction;
+            this.unitSelectionModal.notifyForFactionSelect(this.currentSelectedFaction, this.playerName);
         }
-        this.currentSelectedFaction = newClickedFaction;
     }
 
     _onHeroClick = e => {
@@ -157,19 +162,26 @@ export default class UnitSelectionPanel {
         document.querySelector(`button[data-lock-selected-${type}="${this.playerName}"]`).addEventListener('click', this[`_onLock_${type}`]);
     }
 
-    _assignEventToNodeList(listSelector, event, callback) {
-        const collection = document.querySelectorAll(listSelector);
-        collection.forEach(unit => {
-            unit.addEventListener(event, callback);
-        });
-    }
-
     _addEventListenersForUnitSelect() {
-        this._assignEventToNodeList(`div[data-unit-of-player="${this.playerName}"]`, 'click', this._onHeroClick);
+        Element.addListenerToNodeList(`div[data-unit-of-player="${this.playerName}"]`, 'click', this._onHeroClick);
     }
 
     addEventListenersForFactions() {
-        this._assignEventToNodeList(`div[data-faction-of-player="${this.playerName}"]`, 'click', this._onFactionClick);
+        Element.addListenerToNodeList(`div[data-faction-of-player="${this.playerName}"]`, 'click', this._onFactionClick);
         this._addEventListenerForLock('faction');
+    }
+
+    // behaviour
+
+    acceptSelectionNotification(selectedFaction) {
+        // disable the faction from current panel
+        this.disabledFaction = selectedFaction;
+        const panelUnits = document.querySelectorAll(`div[data-faction-of-player="${this.playerName}"]`)
+        for (const unit of panelUnits) {
+            unit.classList.remove('disabled');
+            if (unit.dataset.faction === this.disabledFaction) {
+                unit.classList.add('disabled');
+            }
+        }
     }
 }

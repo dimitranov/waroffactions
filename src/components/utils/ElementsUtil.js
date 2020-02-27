@@ -57,6 +57,13 @@ class ElementsUtil {
 
         // }
     }
+
+    addListenerToNodeList(listSelector, event, callback) {
+        const collection = document.querySelectorAll(listSelector);
+        collection.forEach(unit => {
+            unit.addEventListener(event, callback);
+        });
+    }
 }
 
 class ElementFactory {
