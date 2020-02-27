@@ -10,7 +10,8 @@ export default class UnitSelectionPanel {
         this.element = document.createElement('div');
         this.element.classList.add('playerPanel');
         this.element.id = 'playerPanel';
-        this._renderFactionAndUnitPicking();
+
+        this._renderFactionPicking();
 
         this.currentSelectedFaction = null;
         this.locked = false;
@@ -19,6 +20,8 @@ export default class UnitSelectionPanel {
     static lockedPlayersMap = {};
 
     static playerFactionSelectCount = 0;
+
+    // views
 
     _renderLockedPanel() {
         let selectedUnits = '';
@@ -68,41 +71,42 @@ export default class UnitSelectionPanel {
         return unitsEls;
     }
 
-    _renderReturnToFactionsBTN() {
-        return `<button class="returnToFactionsBTN" data-faction-return-btn-player-name="${this.playerName}">return</button> `;
-    }
-
-    _renderLockBTN() {
-        return `<button class="lockSelectionBTN" data-lock-selections="${this.playerName}">lock</button> `;
-    }
-
-    _renderFactionAndUnitPicking() {
+    _renderFactionPicking() {
         this.element.innerHTML = `
             <h1>${this.playerName}</h1>
-            ${this.currentSelectedFaction ? `<p class="factionTitle">${this.currentSelectedFaction}</p>` : ''}
             <div class="pool">
-                ${this.locked ? this._renderLockedPanel() : ''}
-                ${!this.locked ? (this.currentSelectedFaction ? this._renderUnitsPool(this.currentSelectedFaction) : this._renderFactionsPool()) : ''}
-                ${this.currentSelectedFaction ? this._renderReturnToFactionsBTN() : ''}
-                ${this.currentSelectedFaction ? this._renderLockBTN() : ''}
+                ${this._renderFactionsPool()}
+                <button class="lockSelectionBTN" data-lock-selected-faction="${this.playerName}">lock</button> 
+            </div>
+        `;
+    }
+    
+    _renderHeroesPicking() {
+        this.element.innerHTML = `
+            <h1>${this.playerName}</h1>
+            <p class="factionTitle">${this.currentSelectedFaction}</p>
+            <div class="pool">
+                ${!this.locked ? this._renderUnitsPool(this.currentSelectedFaction) : this._renderLockedPanel()}
+                ${!this.locked ? `<button class="lockSelectionBTN" data-lock-selected-hero="${this.playerName}">lock</button>` : '' }
             </div>
         `;
     }
 
-    _onFactionSelect = e => {
-        this.currentSelectedFaction = e.currentTarget.dataset.faction;
-        this.player.setFaction(this.currentSelectedFaction);
-        UnitSelectionPanel.playerFactionSelectCount += 1;
-        if (UnitSelectionPanel.playerFactionSelectCount === 2) {
-            this.unitSelectionModal.changeTitle('Select your HEROS')
+    // actions
+
+    _onFactionClick = e => {
+        const newClickedFaction = e.currentTarget.dataset.faction;
+
+        e.currentTarget.classList.add('selectedUnit');
+        if (this.currentSelectedFaction && newClickedFaction !== this.currentSelectedFaction) {
+            // change classes and unselect
+            document.querySelector(`div[data-faction="${this.currentSelectedFaction}"][data-faction-of-player="${this.playerName}"]`)
+                .classList.remove('selectedUnit');
         }
-        this._renderFactionAndUnitPicking();
-        this._addListenerForReturnToFactionPanel();
-        this._addEventListenerForLock();
-        this._addEventListenersForUnitSelect();
+        this.currentSelectedFaction = newClickedFaction;
     }
 
-    _onUnitSelectFromPool = e => {
+    _onHeroClick = e => {
         const unitName = e.currentTarget.dataset.unitName;
 
         if (this.player.hasUnit(unitName)) {
@@ -114,18 +118,29 @@ export default class UnitSelectionPanel {
         }
     }
 
-    _onReturnToFactionsClick = e => {
-        this.currentSelectedFaction = null;
-        this.player.resetPlayerSelection();
-        this._renderFactionAndUnitPicking();
-        this.addEventListenersForFactions();
+    _onLock_faction = () => {
+        this.player.setFaction(this.currentSelectedFaction);
+        UnitSelectionPanel.playerFactionSelectCount += 1;
+        if (UnitSelectionPanel.playerFactionSelectCount === 2) {
+            this.unitSelectionModal.changeTitle('Select your HEROS')
+        }
+        this._renderHeroesPicking();
+        this._addEventListenersForUnitSelect();
+        this._addEventListenerForLock('hero');
+    }
+
+    _onLock_hero = () => {
+        if (this.player.units.length > 0) {
+            this.locked = true;
+            this._renderHeroesPicking();
+        }
     }
 
     _onLockSelection = e => {
         if (this.player.units.length > 0) {
             this.locked = true;
             this.currentSelectedFaction = null;
-            this._renderFactionAndUnitPicking();
+            this._renderHeroesPicking();
 
             UnitSelectionPanel.lockedPlayersMap[this.player.name] = true;
 
@@ -136,12 +151,10 @@ export default class UnitSelectionPanel {
         }
     }
 
-    _addListenerForReturnToFactionPanel() {
-        document.querySelector(`button[data-faction-return-btn-player-name="${this.playerName}"]`).addEventListener('click', this._onReturnToFactionsClick);
-    }
+    // listeners
 
-    _addEventListenerForLock() {
-        document.querySelector(`button[data-lock-selections="${this.playerName}"]`).addEventListener('click', this._onLockSelection);
+    _addEventListenerForLock(type) {
+        document.querySelector(`button[data-lock-selected-${type}="${this.playerName}"]`).addEventListener('click', this[`_onLock_${type}`]);
     }
 
     _assignEventToNodeList(listSelector, event, callback) {
@@ -152,10 +165,11 @@ export default class UnitSelectionPanel {
     }
 
     _addEventListenersForUnitSelect() {
-        this._assignEventToNodeList(`div[data-unit-of-player="${this.playerName}"]`, 'click', this._onUnitSelectFromPool);
+        this._assignEventToNodeList(`div[data-unit-of-player="${this.playerName}"]`, 'click', this._onHeroClick);
     }
 
     addEventListenersForFactions() {
-        this._assignEventToNodeList(`div[data-faction-of-player="${this.playerName}"]`, 'click', this._onFactionSelect);
+        this._assignEventToNodeList(`div[data-faction-of-player="${this.playerName}"]`, 'click', this._onFactionClick);
+        this._addEventListenerForLock('faction');
     }
 }

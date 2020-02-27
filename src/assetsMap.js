@@ -56,11 +56,6 @@ export const ASSETS = {
             left: 7,
             imageURL:  'https://units.wesnoth.org/1.5.2/pics/00031_berserker.png',
         }
-
-        // Herion: 'https://units.wesnoth.org/1.5.2/pics/00024_stalwart.png',
-        // Korvuld: 'https://units.wesnoth.org/1.5.2/pics/00027_thunderer.png',
-        // Mormond: 'https://units.wesnoth.org/1.5.2/pics/00028_thunderguard.png',
-        // Qamok: 'https://units.wesnoth.org/1.5.2/pics/00031_berserker.png'
     },
     Elves: {
         base: './images/Elves.png',

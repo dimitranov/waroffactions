@@ -10,12 +10,12 @@ export default class UnitSelectionModal {
 
     activate() {
         const poolContainer = Element.div();
-        const unitSelectionPanels = [
+        this.unitSelectionPanels = [
             new UnitSelectionPanel(this.playerMediator.activePlayer, this.platform, this),
             new UnitSelectionPanel(this.playerMediator.enemyPlayer, this.platform, this)
         ];
 
-        unitSelectionPanels.forEach(poolPanel => {
+        this.unitSelectionPanels.forEach(poolPanel => {
             poolContainer.appendChild(poolPanel.element);
         });
 
@@ -31,7 +31,7 @@ export default class UnitSelectionModal {
 
         this.modal.show();
 
-        unitSelectionPanels.forEach(poolPanel => {
+        this.unitSelectionPanels.forEach(poolPanel => {
             poolPanel.addEventListenersForFactions();
         });
     }
@@ -46,5 +46,11 @@ export default class UnitSelectionModal {
 
     onHandleStartGameSession = () => {
         console.log('click start game');
+        
+        if (this.unitSelectionPanels[0].locked && this.unitSelectionPanels[1].locked) {
+            // ready to start game 
+            this.platform.unlockGame();
+            this.platform.handleStartGame();
+        }
     }
 }

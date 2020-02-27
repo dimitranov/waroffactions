@@ -30,9 +30,9 @@ export default class Platform {
 
         this.unitMediatorMap = {};
         this.UnitBuilder = new UnitBuilder();
-        // this.initPlayerRegistrationModal()
+        // this._initPlayerRegistrationModal()
         this.playerMediator = new PlayerMediator(['Dimi', 'Georgi']);
-        this.initHeroPoolSelection();
+        this._initHeroPoolSelection();
     }
 
     handleStartGame() {
@@ -79,7 +79,7 @@ export default class Platform {
         }
     }
 
-    initPlayerRegistrationModal() {
+    _initPlayerRegistrationModal() {
         this.newPlayerRegistrationModal = new PlayerRegistrationModal(this);
         this.newPlayerRegistrationModal.activate();
     }
@@ -87,10 +87,10 @@ export default class Platform {
     initPlayerMediator(playersArray) {
         this.playerMediator = new PlayerMediator(playersArray);
         this.newPlayerRegistrationModal.close();
-        this.initHeroPoolSelection();
+        this._initHeroPoolSelection();
     }
 
-    initHeroPoolSelection() {
+    _initHeroPoolSelection() {
         this.unitSelectionModal = new UnitSelectionModal(this, this.playerMediator);
         this.unitSelectionModal.activate();
     }
