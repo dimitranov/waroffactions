@@ -25,7 +25,7 @@ export default class RageUnit extends Unit {
     _attack = (target) => {
         super._attack(target, 'male');
         this.rage += 5;
-        this.baseDMG = this.baseDMG + ((this.baseDMG * this.rage) / 100);
+        this.baseDMG = Math.floor(this.baseDMG + ((this.baseDMG * this.rage) / 100));
         this.updateStatBars();
     }
 }
