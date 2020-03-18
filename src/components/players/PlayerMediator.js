@@ -47,7 +47,11 @@ export default class PlayerMediator {
         return this.enemyPlayer;
     }
 
-    getCurrentActivePlayer = () =>  {
+    getCurrentActivePlayer = () => {
         return this.activePlayer;
+    }
+
+    anounceVictory = (player) => {
+        console.log(player + ' WON !!!!')
     }
 }

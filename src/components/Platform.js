@@ -20,8 +20,8 @@ export default class Platform {
 
         this.unitPool = document.getElementById('unitPool');
 
-        // this.gameLocked = true;
-        this.gameLocked = false;
+        this.gameLocked = true;
+        // this.gameLocked = false;
 
         this.offsetMap = []; // 340x670px
         this.cordsMap = []; // 3x4
@@ -31,8 +31,8 @@ export default class Platform {
 
         this.unitMediatorMap = {};
         this.UnitBuilder = new UnitBuilder();
-        // this._initPlayerRegistrationModal();
-        this.playerMediator = new PlayerMediator(['Dimi', 'Georgi']);
+        this._initPlayerRegistrationModal();
+        // this.playerMediator = new PlayerMediator(['Dimi', 'Georgi']);
         // this._initHeroPoolSelection();
     }
 
@@ -43,13 +43,18 @@ export default class Platform {
             this.playerUnitsArrayMap[this.playerMediator.activePlayer.name] = this.playerMediator.activePlayer.units;
             this.playerUnitsArrayMap[this.playerMediator.enemyPlayer.name] = this.playerMediator.enemyPlayer.units;
 
-            this.playerUnitsArrayMap = {
-                Dimi: ["Urvald", "Mormond"],
-                Georgi: ["Euvion", "Lemro"],
-            };
+            // this.playerUnitsArrayMap = {
+            //     Dimi: ["Urvald", "Mormond"],
+            //     Georgi: ["Euvion", "Lemro"],
+            // };
 
             const activePlayer = this.playerMediator.activePlayer;
             const enemyPlayer = this.playerMediator.enemyPlayer;
+
+            // activePlayer.units = ["Urvald", "Mormond"];
+            // enemyPlayer.units = ["Euvion", "Lemro"];
+            // activePlayer.unitsAlive = ["Urvald", "Mormond"];
+            // enemyPlayer.unitsAlive = ["Euvion", "Lemro"];
 
             for (const playerName in this.playerUnitsArrayMap) {
                 // create the mediator
@@ -149,7 +154,9 @@ export default class Platform {
 
 
 // TASKS:
-
+// disable PLAY button untill all player have locked there nits
+// make the unit counter
+// make little icons indication  what type of unit is the selectable unit
 // 1. Make visual changes to friendly units when close to each other
 // 2. Make atacking possible
 // 3. add more assets and export units configs in assetsJs file

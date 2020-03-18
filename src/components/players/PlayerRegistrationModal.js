@@ -9,11 +9,12 @@ export default class PlayerRegistrationModal {
 
     activate() {
         this.modal = new ModalUtil({
+            className: 'user-registration-modal',
             title: 'Registration Form',
             html: this.generateRegistrationForm(),
             buttons: [{
-                name: 'Submit',
-                class: 'primary-buton',
+                name: 'NEXT',
+                class: ['button-main', 'button-orange', 'button-large'],
                 action: this.submitPlayerInfo
             }]
         });
@@ -33,9 +34,9 @@ export default class PlayerRegistrationModal {
         return `
         <div>
             <p>Player 1</p>
-            <input type="text" id="player_1_input"/>
+            <input type="text" id="player_1_input" autocomplete="off"/>
             <p>Player 2</p>
-            <input type="text" id="player_2_input"/>
+            <input type="text" id="player_2_input" autocomplete="off"/>
             <div class="error-container"></div>
         </div>
         `;

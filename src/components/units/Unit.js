@@ -185,6 +185,16 @@ export default class Unit {
 
         if (target.hp <= 0) {
             target._die();
+
+            const enemyPlayer = this.platform.playerMediator.enemyPlayer;
+
+            enemyPlayer.handleUnitDeath(target.name);
+            if (!enemyPlayer.hasAliveUnits()) {
+                // player lost - no more units alive
+                setTimeout(() => {
+                    this.platform.playerMediator.anounceVictory(this.player);
+                }, 500);
+            }
         } else {
             target.element.classList.add('takeDamage');
             setTimeout(() => {
@@ -222,8 +232,8 @@ export default class Unit {
     _getGeneralDetails(data) {
         return `
             <p class="stat">${data.name}</p>
-            <p  class="stat">HP: ${data.hp}/${data.initialHP}</p> 
-            <p  class="stat">DMG: ${data.baseDMG}</p> 
+            <p class="stat">HP: ${data.hp}/${data.initialHP}</p> 
+            <p class="stat">DMG: ${data.baseDMG}</p> 
         `;
     }
 
@@ -235,21 +245,25 @@ export default class Unit {
         this.detailsEL.innerHTML = this.details;
     }
 
+    _onMouseEnterUnit = (e) => {
+        this.setDetailsTooltipTimeout = setTimeout(() => {
+            this.element.classList.add('upFront');
+            this.detailsEL.classList.add('detailsELVisible');
+        }, 2000);
+    }
+
+    _onMouseLeaveUnit = (e) => {
+        if (this.setDetailsTooltipTimeout) {
+            clearTimeout(this.setDetailsTooltipTimeout);
+        }
+        this.element.classList.remove('upFront');
+        this.detailsEL.classList.remove('detailsELVisible');
+    }
+
     activateUnitInteraction() {
         this.element.addEventListener('click', this._onClickOnUnit);
-        this.element.addEventListener('mouseenter', e => {
-            this.setDetailsTooltipTimeout = setTimeout(() => {
-                this.element.classList.add('upFront');
-                this.detailsEL.classList.add('detailsELVisible');
-            }, 2000);
-        });
-        this.element.addEventListener('mouseleave', e => {
-            if (this.setDetailsTooltipTimeout) {
-                clearTimeout(this.setDetailsTooltipTimeout);
-            }
-            this.element.classList.remove('upFront');
-            this.detailsEL.classList.remove('detailsELVisible');
-        });
+        this.element.addEventListener('mouseenter', this._onMouseEnterUnit);
+        this.element.addEventListener('mouseleave', this._onMouseLeaveUnit);
     }
 
     _getOtherUnits() {

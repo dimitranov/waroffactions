@@ -4,6 +4,7 @@ export default class ModalUtil {
     constructor(config) {
         this.title = config.title;
         this.html = config.html;
+        this.className = config.className
         this.buttons = config.buttons;
 
         this.renderModal();
@@ -29,7 +30,7 @@ export default class ModalUtil {
             const btn = Element.button({
                 name: button.name,
                 class: button.class,
-            }, 'START GAME');
+            }, button.name);
             btn.addEventListener('click', button.action);
             buttonElements.push(btn);
         }
@@ -50,14 +51,10 @@ export default class ModalUtil {
         ])
 
         this.modalEl = Element.div({
-            class: 'modal',
+            class: ['modal', this.className],
             id: 'modal-dialog-container'
-        }, [ this.modalContainer ]);
+        }, [this.modalContainer]);
 
-        // this.modalEl.innerHTML = `<div>
-        //     HI  there 
-        // </div>`
-        // document.body.appendChild(this.modalEl);
     }
 
     show() {

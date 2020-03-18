@@ -21,10 +21,11 @@ export default class UnitSelectionModal {
 
         this.modal = new ModalUtil({
             title: 'Pick faction',
+            className: 'unit-selection-modal',
             html: [poolContainer],
             buttons: [{
-                name: 'PLAY',
-                class: 'primary-buton',
+                name: 'START GAME',
+                class: ['button-main', 'button-orange', 'button-large'],
                 action: this.onHandleStartGameSession
             }]
         });

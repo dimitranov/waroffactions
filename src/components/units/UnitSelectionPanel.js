@@ -78,7 +78,7 @@ export default class UnitSelectionPanel {
             <h1>${this.playerName}</h1>
             <div class="pool">
                 ${this._renderFactionsPool()}
-                <button class="lockSelectionBTN" data-lock-selected-faction="${this.playerName}">lock</button> 
+                <button class="button-main button-blue button-small lockSelectionBTN" data-lock-selected-faction="${this.playerName}">lock</button> 
             </div>
         `;
     }
@@ -89,7 +89,7 @@ export default class UnitSelectionPanel {
             <p class="factionTitle">${this.currentSelectedFaction}</p>
             <div class="pool">
                 ${!this.locked ? this._renderUnitsPool(this.currentSelectedFaction) : this._renderLockedPanel()}
-                ${!this.locked ? `<button class="lockSelectionBTN" data-lock-selected-hero="${this.playerName}">lock</button>` : ''}
+                ${!this.locked ? `<button class="button-main button-green button-small lockSelectionBTN" data-lock-selected-hero="${this.playerName}">lock</button>` : ''}
             </div>
         `;
     }
@@ -127,7 +127,7 @@ export default class UnitSelectionPanel {
         this.player.setFaction(this.currentSelectedFaction);
         UnitSelectionPanel.playerFactionSelectCount += 1;
         if (UnitSelectionPanel.playerFactionSelectCount === 2) {
-            this.unitSelectionModal.changeTitle('Select your HEROS')
+            this.unitSelectionModal.changeTitle('Select you\'r HEROES')
         }
         this._renderHeroesPicking();
         this._addEventListenersForUnitSelect();

@@ -4,7 +4,7 @@ const baseeic = {
     baseDMG: null,
     top: null,
     left: null,
-    imageURL:  'null',
+    imageURL: 'null',
     rage: null
 }
 
@@ -14,38 +14,38 @@ export const ASSETS = {
         Urvald: {
             unitType: 'RageUnit',
             name: 'Urvald',
-            hp: 350,
+            hp: 10,
             baseDMG: 25,
             top: 2,
             left: 3,
-            imageURL:  'https://units.wesnoth.org/1.5.2/pics/00021_steelclad.png',
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00021_steelclad.png',
         },
         Herion: {
             unitType: 'RageUnit',
             name: 'Herion',
-            hp: 300,
+            hp: 15,
             baseDMG: 20,
             top: 2,
             left: 6,
-            imageURL:  'https://units.wesnoth.org/1.5.2/pics/00024_stalwart.png',
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00024_stalwart.png',
         },
         Korvuld: {
             unitType: 'RageUnit',
             name: 'Korvuld',
-            hp: 300,
+            hp: 15,
             baseDMG: 30,
             top: 2,
             left: 4,
-            imageURL:  'https://units.wesnoth.org/1.5.2/pics/00027_thunderer.png',
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00027_thunderer.png',
         },
         Mormond: {
             unitType: 'RageUnit',
             name: 'Mormond',
-            hp: 300,
+            hp: 15,
             baseDMG: 27,
             top: 2,
             left: 5,
-            imageURL:  'https://units.wesnoth.org/1.5.2/pics/00028_thunderguard.png',
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00028_thunderguard.png',
         },
         Qamok: {
             unitType: 'RageUnit',
@@ -54,7 +54,7 @@ export const ASSETS = {
             baseDMG: 40,
             top: 2,
             left: 7,
-            imageURL:  'https://units.wesnoth.org/1.5.2/pics/00031_berserker.png',
+            imageURL: 'https://units.wesnoth.org/1.5.2/pics/00031_berserker.png',
         }
     },
     Elves: {

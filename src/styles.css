@@ -1,5 +1,9 @@
+* {
+    outline: none;
+}
+
 html {
-    font-family: Arial;
+    font-family: "Comic Sans MS", cursive, sans-serif;
 }
 
 #platform {
@@ -7,7 +11,7 @@ html {
     vertical-align: top;
     background-image: url('../images/map.png');
     background-size: cover;
-    /* filter: brightness(0); */
+    filter: brightness(0);
 }
 
 #platform.platformFadeIn {
@@ -26,13 +30,15 @@ html {
 
 #playerPanel.playerPanel {
     display: inline-block;
-    height: 380px;
+    height: 400px;
     width: 300px;
     margin-left: 4px;
     margin-right: 4px;
     margin-bottom: 20px;
     background-color: #fffbf0;
     position: relative;
+    border-radius: 5px;
+    box-shadow: inset 0px 0px 3px 1px rgb(152, 152, 152);
 }
 
 #playerPanel.playerPanel button {
@@ -52,7 +58,6 @@ html {
 
 #playerPanel.playerPanel button.lockSelectionBTN {
     left: 10px;
-    background-color: #455eb7;
 }
 
 #playerPanel.playerPanel h1 {
@@ -256,6 +261,50 @@ html {
 
 /* grid */
 
+/* Modal OverRides */
+.user-registration-modal .modal-container {
+    width: 360px;
+
+}
+
+.user-registration-modal .modal-container,
+.unit-selection-modal .modal-container {
+    border-radius: 10px;
+}
+
+.user-registration-modal .modal-header,
+.unit-selection-modal .modal-header {
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.unit-selection-modal .modal-header {
+    margin-bottom: 15px;
+}
+.user-registration-modal .modal-content {}
+
+.user-registration-modal input[type="text"] {
+    width: 70%;
+    height: 40px;
+    border: 2px solid;
+    border-radius: 19px;
+    font-size: 24px;
+    text-align: center;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    box-shadow: 0 4px 0 #5d5a59;
+}
+
+.user-registration-modal input[type='text']:focus {
+    animation: input_focus_idle 800ms ease-in-out 0s infinite ;
+}
+.user-registration-modal .modal-footer {
+    padding: 25px 0 7px 0;
+}
+.user-registration-modal {}
+.user-registration-modal {}
+
+/* Modal OverRides */
+
 /* modal */
 
 /* The Modal (background) */
@@ -336,6 +385,56 @@ html {
     margin: 0;
 }
 
+/* buttons */
+
+
+
+.button-main:hover {
+    cursor: pointer;
+    animation: button_hover_iddle 800ms ease-in-out 0s infinite forwards;
+}
+
+.button-main {
+    border-radius: 5px;
+    border: none;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    transform: scale(1)
+}
+
+.button-large {
+    width: 180px;
+    font-size: 20px;
+    height: 40px;
+}
+
+.button-small {
+    width: 40px;
+    font-size: 14px;
+    height: 20px;
+}
+
+.button-orange {
+    background: orange;
+    box-shadow: 0 4px 1px #a5610c;
+}
+
+.button-blue {
+    background: rgb(89, 89, 230);
+    box-shadow: 0 4px 1px #3533a7;
+}
+
+.button-green {
+    background: rgb(78, 187, 93);
+    box-shadow: 0 4px 1px #33a742;
+}
+
+
+
+
+
+
+/* buttons */
+
 
 @keyframes takeDamage {
     0%, 100% {
@@ -384,13 +483,34 @@ html {
 
 @keyframes platformFadeIn {
     0% {
-        /* filter: brightness(0); */filter: brightness(1.1);
+        filter: brightness(0);
+        /* filter: brightness(1.1); */
     }
     70% {
-        /* filter: brightness(0.3); */filter: brightness(1.1);
+        filter: brightness(0.3);
+        /* filter: brightness(1.1); */
     }
     100% {
         filter: brightness(1.1);
+    }
+}
+
+@keyframes input_focus_idle {
+    0%, 100% {
+        box-shadow: 0 3px 0 #5d5a59;
+    }
+    50% {
+        box-shadow: 0 5px 0 #5d5a59;
+    }
+}
+
+@keyframes button_hover_iddle {
+    0%, 100% {
+        transform: scale(1)
+    }
+
+    50% {
+        transform: scale(1.04)
     }
 }
 

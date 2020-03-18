@@ -28,11 +28,11 @@ export default class EnergyUnit extends Unit {
             this.baseDMG = this.baseDMG * 2;
         }
         super._attack(target, 'male');
-        this.energy += 20;
         if (this.energy > 100) {
             this.energy = 0;
             this.baseDMG = this.initialDMG;
         }
+        this.energy += 20;
         this.updateStatBars();
     }
 }

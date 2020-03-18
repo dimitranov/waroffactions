@@ -5,6 +5,7 @@ export default class Player {
         this.faction = null;
         this.isOnTurn = false;
         this.units = [];
+        this.unitsAlive = [];
         this.number = number;
     }
 
@@ -14,10 +15,12 @@ export default class Player {
 
     setUnit(unit) {
         this.units.push(unit);
+        this.unitsAlive.push(unit);
     }
 
     setUnits(units) {
         this.units = units;
+        this.unitsAlive = units;
     }
 
     deselectUnit(unit) {
@@ -26,6 +29,15 @@ export default class Player {
 
     hasUnit(unit) {
         return this.units.find(u => u === unit);
+    }
+
+    hasAliveUnits() {
+        return this.unitsAlive.length !== 0
+    }
+
+    handleUnitDeath(unit) {
+        const unitPosition = this.unitsAlive.indexOf(unit);
+        this.unitsAlive.splice(unitPosition, 1);
     }
 
     resetPlayerSelection() {
