@@ -20,7 +20,7 @@ export default class UnitSelectionModal {
         });
 
         this.modal = new ModalUtil({
-            title: 'Pick faction',
+            title: 'PICK FACTION',
             className: 'unit-selection-modal',
             html: [poolContainer],
             buttons: [{

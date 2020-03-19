@@ -10,7 +10,6 @@ export default class UnitSelectionPanel {
 
         this.element = document.createElement('div');
         this.element.classList.add('playerPanel');
-        this.element.id = 'playerPanel';
 
         this._renderFactionPicking();
 
