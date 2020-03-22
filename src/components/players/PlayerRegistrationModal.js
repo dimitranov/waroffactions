@@ -26,10 +26,6 @@ export default class PlayerRegistrationModal {
         this.modal.hide();
     }
 
-    generateRegistrationModal() {
-
-    }
-
     generateRegistrationForm() {
         return `
         <div>
@@ -47,7 +43,12 @@ export default class PlayerRegistrationModal {
         const p2 = document.getElementById('player_2_input');
 
         if (p1.value && p2.value) {
-            this.platform.initPlayerMediator([p1.value, p2.value]);
+            if (p1.value !== p2.value) {
+                this.platform.initPlayerMediator([p1.value, p2.value]);
+            } else {
+                this.modal.showValidationError('Names must be different.');
+            }
+
         } else {
             this.modal.showValidationError('Please write 2 names.');
         }

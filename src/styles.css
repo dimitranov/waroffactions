@@ -12,9 +12,12 @@ body {
     background-size: cover;
     height: 100vh;
     text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 #platform {
+    margin-top: 80px;
     display: inline-block;
     vertical-align: top;
     background-image: url('../images/map.png');
@@ -123,15 +126,12 @@ body {
     border: 1px dashed black;
 }
 
- .poolFaction img:hover {
-    animation: unitIdle 700ms ease-in-out 0s infinite forwards;
-}
-
  .poolFaction p {
     margin: 0;
     text-align: center;
-    font-size: 14px;
+    font-size: 16px;
     margin-top: -10px;
+    font-weight: 600;
 }
 
  .poolFaction.selectedUnit {
@@ -145,6 +145,8 @@ body {
  .factionTitle {
     text-align: center;
     margin: 5px;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 
@@ -161,14 +163,14 @@ body {
     z-index: 1;
 }
 
-.unit img {
-    /* animation: unitIdle 1000ms ease-in-out 0s infinite forwards; */
+.unit:not(.isEnemy) img {
+    animation: unitIdle 1000ms ease-in-out 0s infinite forwards;
 }
 
 .unit.onTurn img {
     outline: 3px solid lightgreen;
     outline-offset: -4px;
-    animation: unitIdle 1000ms ease-in-out 0s infinite forwards;
+
     outline-style: dashed;
 }
 
@@ -291,7 +293,7 @@ body {
 .unit-selection-modal .modal-header {
     margin-bottom: 15px;
 }
-.user-registration-modal .modal-content {}
+
 
 .user-registration-modal input[type="text"] {
     width: 70%;
@@ -310,19 +312,48 @@ body {
 .user-registration-modal .modal-footer {
     padding: 25px 0 7px 0;
 }
-.user-registration-modal {}
-.user-registration-modal {}
+
+.winner-modal .modal-header {
+    font-size: 40px;
+    font-weight: 800;
+}
+
+.winner-modal .modal-content {
+    font-size: 40px;
+    margin: 20px;
+    width: 400px;
+}
+
+.winner-modal .winner-modal-container {
+    text-transform: uppercase;
+    padding: 20px 0 20px 0;
+}
+
+.winner-modal .image-container img {
+    padding: 20px 0 10px 0;
+}
+
+.winner-modal .image-container img:nth-child(1) {
+    transform: scale(1.2);
+}
+
+.winner-modal .image-container img:nth-child(2) {
+    transform: scale(1.4);
+}
+
+.winner-modal .image-container img:nth-child(3) {
+    transform: scale(1.2);
+}
 
 /* Modal OverRides */
 
 /* modal */
 
-/* The Modal (background) */
 .modal {
     display: block;
     position: fixed;
     z-index: 1;
-    padding-top: 100px;
+    padding-top: 160px;
     left: 0;
     top: 0;
     text-align: center;
@@ -338,6 +369,16 @@ body {
     display: inline-block;
     padding: 20px;
     text-align: center;
+}
+
+.modal .modal-error {
+    color: white;
+    background-color: red;
+    width: 300px;
+    margin: 0 auto;
+    display: block;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 
@@ -407,6 +448,7 @@ body {
 .button-main {
     border-radius: 5px;
     border: none;
+    text-transform: uppercase;
     font-family: "Comic Sans MS", cursive, sans-serif;
     transform: scale(1)
 }

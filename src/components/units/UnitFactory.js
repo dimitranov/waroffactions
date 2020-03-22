@@ -9,23 +9,24 @@ export default class UnitFactory {
         this.platform = platform;
     }
 
-    _getUnitConfig(name) {
+    _getUnitConfig(name, cords) {
         for (const faction in ASSETS) {
             for (const unit in ASSETS[faction]) {
                 if (unit == name) {
-                    return ASSETS[faction][unit];
+                    const unitConfig = { ...ASSETS[faction][unit], ...cords };
+                    return unitConfig;
                 }
             }
         }
     }
 
-    create(name, playerName) {
-        const config = this._getUnitConfig(name);
+    create(name, playerName, cords) {
+        const config = this._getUnitConfig(name, cords);
         let UnitType = null;
         switch (config.unitType) {
-            case 'ManaUnit': UnitType = ManaUnit; break;
-            case 'RageUnit': UnitType = RageUnit; break;
-            case 'EnergyUnit': UnitType = EnergyUnit; break;
+            case 'Mana': UnitType = ManaUnit; break;
+            case 'Raget': UnitType = RageUnit; break;
+            case 'Energy': UnitType = EnergyUnit; break;
             default: UnitType = Unit;
         }
         const unit = new UnitType(config, this.platform, playerName);

@@ -6,18 +6,23 @@ export default class ModalUtil {
         this.html = config.html;
         this.className = config.className
         this.buttons = config.buttons;
+        this.errorShown = false;
 
         this.renderModal();
     }
 
     showValidationError(errMgs) {
-        this.validationError = Element.p({
-            class: 'modal-error'
-        }, errMgs);
-        this.modalEl.appendChild(this.validationError);
-        setTimeout(() => {
-            this.modalEl.remove(this.validationError);
-        }, 4000);
+        if (!this.errorShown) {
+            this.validationError = Element.p({
+                class: 'modal-error'
+            }, errMgs);
+            this.modalEl.appendChild(this.validationError);
+            this.errorShown = true;
+            setTimeout(() => {
+                this.modalEl.removeChild(this.validationError);
+                this.errorShown = false;
+            }, 4000);
+        }
     }
 
     changeTitle(newTitle) {

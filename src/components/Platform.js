@@ -42,7 +42,7 @@ export default class Platform {
 
             this.playerUnitsArrayMap[this.playerMediator.activePlayer.name] = this.playerMediator.activePlayer.units;
             this.playerUnitsArrayMap[this.playerMediator.enemyPlayer.name] = this.playerMediator.enemyPlayer.units;
-
+            // this.playerMediator.anounceVictory('Dimi');
             // this.playerUnitsArrayMap = {
             //     Dimi: ["Urvald", "Mormond"],
             //     Georgi: ["Euvion", "Lemro"],
@@ -70,13 +70,14 @@ export default class Platform {
 
                 // create units
                 const unitsArray = this.playerUnitsArrayMap[playerName];
-                unitsArray.forEach(unitName => {
+                unitsArray.forEach((unitName, index) => {
+                    const cords = this.playerMediator.players[playerName].initialUnitCords[index];
                     const details = {
                         isFrozen: playerName !== activePlayer.name,
                         isEnemy: enemyPlayer.units.indexOf(unitName) > -1
                     };
 
-                    const unit = this.UnitBuilder.create(unitName, playerName, this, details);
+                    const unit = this.UnitBuilder.create(unitName, playerName, this, details, cords);
 
                     currentUnitMediator.register(unit);
                     this.unitsMap[unitName] = unit;

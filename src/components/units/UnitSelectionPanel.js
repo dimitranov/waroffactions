@@ -123,20 +123,26 @@ export default class UnitSelectionPanel {
     }
 
     _onLock_faction = () => {
-        this.player.setFaction(this.currentSelectedFaction);
-        UnitSelectionPanel.playerFactionSelectCount += 1;
-        if (UnitSelectionPanel.playerFactionSelectCount === 2) {
-            this.unitSelectionModal.changeTitle('Select you\'r HEROES')
+        if (this.currentSelectedFaction) {
+            this.player.setFaction(this.currentSelectedFaction);
+            UnitSelectionPanel.playerFactionSelectCount += 1;
+            if (UnitSelectionPanel.playerFactionSelectCount === 2) {
+                this.unitSelectionModal.changeTitle('Select you\'r HEROES')
+            }
+            this._renderHeroesPicking();
+            this._addEventListenersForUnitSelect();
+            this._addEventListenerForLock('hero');
+        } else {
+            this.unitSelectionModal.modal.showValidationError('You have to pick a faction !!!');
         }
-        this._renderHeroesPicking();
-        this._addEventListenersForUnitSelect();
-        this._addEventListenerForLock('hero');
     }
 
     _onLock_hero = () => {
         if (this.player.units.length > 0) {
             this.locked = true;
             this._renderHeroesPicking();
+        } else {
+            this.unitSelectionModal.modal.showValidationError('Select you\'r Units !!!');
         }
     }
 

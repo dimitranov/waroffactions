@@ -1,4 +1,32 @@
 import Player from "./Player.js";
+import WinnerModal from "./WinnerModal.js";
+
+const UNITS_INITIAL_CORDS = {
+    activePlayer: [{
+        top: 1,
+        left: 1
+    },
+    {
+        top: 2,
+        left: 3
+    },
+    {
+        top: 1,
+        left: 5
+    }],
+    enemyPlayer: [{
+        top: 7,
+        left: 3
+    },
+    {
+        top: 6,
+        left: 5
+    },
+    {
+        top: 7,
+        left: 7
+    }]
+};
 
 export default class PlayerMediator {
     constructor(names) {
@@ -7,6 +35,7 @@ export default class PlayerMediator {
 
         this.activePlayer = null;
         this.enemyPlayer = null;
+        this.UNITS_INITIAL_CORDS = UNITS_INITIAL_CORDS;
 
         this.unitMediatorMap = {};
 
@@ -26,8 +55,10 @@ export default class PlayerMediator {
 
         if (!this.activePlayer) {
             this.activePlayer = player;
+            this.activePlayer.initialUnitCords = UNITS_INITIAL_CORDS.activePlayer;
         } else {
             this.enemyPlayer = player;
+            this.enemyPlayer.initialUnitCords = UNITS_INITIAL_CORDS.enemyPlayer;
         }
     }
 
@@ -52,6 +83,9 @@ export default class PlayerMediator {
     }
 
     anounceVictory = (player) => {
-        console.log(player + ' WON !!!!')
+        const units = this.enemyPlayer.units;
+        const faction = this.enemyPlayer.faction;
+        const winnerModal = new WinnerModal(player, units, faction);
+        winnerModal.activate();
     }
 }
