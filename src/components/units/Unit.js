@@ -1,5 +1,19 @@
 import ElementsUtil from '../utils/ElementsUtil.js'
 
+
+function throttle(callback, interval) {
+    let enableCall = true;
+
+    return function (...args) {
+        if (!enableCall) return;
+
+        enableCall = false;
+        callback.apply(this, args);
+        setTimeout(() => enableCall = true, interval);
+    }
+}
+
+
 export default class Unit {
     constructor({ name, hp, baseDMG, top, left, imageURL }, platform, player) {
         this.player = player;
@@ -134,6 +148,7 @@ export default class Unit {
     updateStatBars() {
         this.healthEL.style.height = (this.hp * 0.25) + 'px';
         this.details = this._getGeneralDetails(this);
+        this._setDetailsContentToElement();
     }
 
     _updatePosition(newCords) {
@@ -189,11 +204,12 @@ export default class Unit {
             const enemyPlayer = this.platform.playerMediator.enemyPlayer;
 
             enemyPlayer.handleUnitDeath(target.name);
+            this.platform.notifyUnitDeath(target.name);
             if (!enemyPlayer.hasAliveUnits()) {
                 // player lost - no more units alive
                 setTimeout(() => {
                     this.platform.playerMediator.anounceVictory(this.player);
-                }, 500);
+                }, 1500);
             }
         } else {
             target.element.classList.add('takeDamage');
@@ -209,13 +225,14 @@ export default class Unit {
     _onClickOnUnit = e => {
         if (this.isEnemy) {
             const Attacker = this.unitsMediator.platform.getCurrentActiveUnit();
-            if (Attacker) {
+            if (Attacker && this.canBeAttackedBy(Attacker)) {
                 this._takeDamageAnimation(Attacker.baseDMG);
                 Attacker._attack(this);
                 setTimeout(() => {
                     Attacker._handleEndTurn();
                 }, 400);
             }
+            return;
         }
 
         if (this.isActive) {
@@ -229,15 +246,30 @@ export default class Unit {
         }
     }
 
+    canBeAttackedBy = (unit) => {
+        const attacableCords = unit.reachableSquaresAttackable.map(sq => ({
+            top: sq.dataset.top,
+            left: sq.dataset.left,
+        }));
+
+        for (const cords of attacableCords) {
+            if (this.top == cords.top && this.left == cords.left) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     _getGeneralDetails(data) {
         return `
-            <p class="stat">${data.name}</p>
-            <p class="stat">HP: ${data.hp}/${data.initialHP}</p> 
-            <p class="stat">DMG: ${data.baseDMG}</p> 
+            <p class="stat name">${data.name}</p>
+            <p class="stat"><span>HP:</span> ${data.hp}/${data.initialHP}</p> 
+            <p class="stat"><span>DMG:</span> ${data.baseDMG}</p> 
         `;
     }
 
-    enchanceGeneraDetails(content) {
+    enchanceGeneralDetails(content) {
         this.details += `<p class="stat">${content}</p>`
     }
 
@@ -249,7 +281,7 @@ export default class Unit {
         this.setDetailsTooltipTimeout = setTimeout(() => {
             this.element.classList.add('upFront');
             this.detailsEL.classList.add('detailsELVisible');
-        }, 2000);
+        }, 700);
     }
 
     _onMouseLeaveUnit = (e) => {
@@ -261,7 +293,7 @@ export default class Unit {
     }
 
     activateUnitInteraction() {
-        this.element.addEventListener('click', this._onClickOnUnit);
+        this.element.addEventListener('click', throttle(this._onClickOnUnit, 500));
         this.element.addEventListener('mouseenter', this._onMouseEnterUnit);
         this.element.addEventListener('mouseleave', this._onMouseLeaveUnit);
     }
@@ -336,8 +368,6 @@ export default class Unit {
                 }
             }
         });
-
-        console.log(this.reachableSquaresAttackable)
 
         Array.from(document.querySelectorAll('.unit.onTurn')).forEach((e) => {
             e.classList.remove('onTurn');

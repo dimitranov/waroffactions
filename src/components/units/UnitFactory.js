@@ -23,12 +23,14 @@ export default class UnitFactory {
     create(name, playerName, cords) {
         const config = this._getUnitConfig(name, cords);
         let UnitType = null;
+
         switch (config.unitType) {
             case 'Mana': UnitType = ManaUnit; break;
-            case 'Raget': UnitType = RageUnit; break;
+            case 'Rage': UnitType = RageUnit; break;
             case 'Energy': UnitType = EnergyUnit; break;
             default: UnitType = Unit;
         }
+
         const unit = new UnitType(config, this.platform, playerName);
 
         return unit;

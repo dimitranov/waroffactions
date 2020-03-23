@@ -10,7 +10,7 @@ import ModalUtil from './utils/ModalUtil.js';
 import Element from './utils/ElementsUtil.js';
 
 
-import Player from './players/Player.js';
+import PlayerPanel from './players/PlayerPanel.js';
 
 export default class Platform {
     constructor(width, height) {
@@ -18,10 +18,9 @@ export default class Platform {
         this.platformEL.style.width = width + 'px';
         this.platformEL.style.height = height + 'px';
 
-        this.unitPool = document.getElementById('unitPool');
+        this.gridCellWidth = width / 10;
 
         this.gameLocked = true;
-        // this.gameLocked = false;
 
         this.offsetMap = []; // 340x670px
         this.cordsMap = []; // 3x4
@@ -32,8 +31,7 @@ export default class Platform {
         this.unitMediatorMap = {};
         this.UnitBuilder = new UnitBuilder();
         this._initPlayerRegistrationModal();
-        // this.playerMediator = new PlayerMediator(['Dimi', 'Georgi']);
-        // this._initHeroPoolSelection();
+
     }
 
     handleStartGame() {
@@ -84,6 +82,8 @@ export default class Platform {
                 });
             }
             this.unitMediatorMap['UM_' + enemyPlayer.name].setAsEnemies();
+
+            this.handlePlayerPanels();
         }
     }
 
@@ -103,6 +103,19 @@ export default class Platform {
         this.unitSelectionModal.activate();
     }
 
+    notifyUnitDeath(unit) {
+        this.leftPanel.handleDisableUnitOnDeath(unit);
+        this.rigthPanel.handleDisableUnitOnDeath(unit);
+    }
+
+    handlePlayerPanels() {
+        this.leftPanel = new PlayerPanel(this.playerMediator.activePlayer, this);
+        this.rigthPanel = new PlayerPanel(this.playerMediator.enemyPlayer, this);
+
+        this.leftPanel.renderPanel('left');
+        this.rigthPanel.renderPanel('right');
+    }
+
     unlockGame() {
         this.unitSelectionModal.close();
         this.gameLocked = false;
@@ -116,16 +129,6 @@ export default class Platform {
         return this.currentActiveUnit;
     }
 
-    handleUnitSelectionStage() {
-        [
-            new UnitSelectionPanel(this.playerMediator.activePlayer, this),
-            new UnitSelectionPanel(this.playerMediator.enemyPlayer, this)
-        ].forEach(poolPanel => {
-            this.unitPool.appendChild(poolPanel.element);
-            poolPanel.addEventListenersForFactions();
-        });
-    }
-
     _activateGameStartAnimation() {
         this.platformEL.classList.add('platformFadeIn');
     }
@@ -134,8 +137,8 @@ export default class Platform {
         const newSquare = document.createElement('div');
         newSquare.className = 'gridSquare';
         newSquare.style.display = 'none';
-        newSquare.style.top = (y * 80) + 'px';
-        newSquare.style.left = (x * 80) + 'px';
+        newSquare.style.top = (y * this.gridCellWidth) + 'px';
+        newSquare.style.left = (x * this.gridCellWidth) + 'px';
         newSquare.dataset.top = y;
         newSquare.dataset.left = x;
         this.platformEL.appendChild(newSquare);

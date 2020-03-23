@@ -9,7 +9,7 @@ export default class UnitSelectionPanel {
         this.playerName = this.player.name;
 
         this.element = document.createElement('div');
-        this.element.classList.add('playerPanel');
+        this.element.classList.add('unitSelectionPanel');
 
         this._renderFactionPicking();
 
@@ -77,7 +77,7 @@ export default class UnitSelectionPanel {
             <h1>${this.playerName}</h1>
             <div class="pool">
                 ${this._renderFactionsPool()}
-                <button class="button-main button-blue button-small lockSelectionBTN" data-lock-selected-faction="${this.playerName}">lock</button> 
+                <button class="button-main button-blue button-small lockSelectionBTN" data-lock-selected-faction="${this.playerName}">PICK</button> 
             </div>
         `;
     }
@@ -88,8 +88,21 @@ export default class UnitSelectionPanel {
             <p class="factionTitle">${this.currentSelectedFaction}</p>
             <div class="pool">
                 ${!this.locked ? this._renderUnitsPool(this.currentSelectedFaction) : this._renderLockedPanel()}
-                ${!this.locked ? `<button class="button-main button-green button-small lockSelectionBTN" data-lock-selected-hero="${this.playerName}">lock</button>` : ''}
+                ${!this.locked ? `<button class="button-main button-green button-small lockSelectionBTN" data-lock-selected-hero="${this.playerName}">LOCK</button>` : ''}
+                <div class="unit-details-panel ${this.playerName}"></div>
+                ${this._renderHeroDeatailsPanel()}
             </div>
+        `;
+    }
+
+    _renderHeroDeatailsPanel(unitData) {
+        if (!unitData) return '';
+        return `
+            <p><span>Spec:</span> ${unitData.unitSpec}</p>
+            <p><span>Class:</span> ${unitData.unitClass}</p>
+            <p><span>Resource:</span> ${unitData.unitType}</p>
+            <p><span>HP:</span> ${unitData.hp}</p>
+            <p><span>DMG:</span> ${unitData.baseDMG}</p>
         `;
     }
 
@@ -122,6 +135,20 @@ export default class UnitSelectionPanel {
         }
     }
 
+    _onHeroMouseEnter = e => {
+        if (this.detailsClearTimeout) {
+            clearTimeout(this.detailsClearTimeout)
+        }
+        const unitName = e.currentTarget.dataset.unitName;
+        const unitData = ASSETS[this.currentSelectedFaction][unitName];
+        const panel = document.querySelector(`.unit-details-panel.${this.playerName}`);
+        panel.innerHTML = this._renderHeroDeatailsPanel(unitData);
+        this.detailsClearTimeout = setTimeout(() => {
+            panel.innerHTML = '';
+        }, 2000);
+
+    }
+
     _onLock_faction = () => {
         if (this.currentSelectedFaction) {
             this.player.setFaction(this.currentSelectedFaction);
@@ -131,6 +158,7 @@ export default class UnitSelectionPanel {
             }
             this._renderHeroesPicking();
             this._addEventListenersForUnitSelect();
+            this._addEventListenersForUnitHover();
             this._addEventListenerForLock('hero');
         } else {
             this.unitSelectionModal.modal.showValidationError('You have to pick a faction !!!');
@@ -169,6 +197,10 @@ export default class UnitSelectionPanel {
 
     _addEventListenersForUnitSelect() {
         Element.addListenerToNodeList(`div[data-unit-of-player="${this.playerName}"]`, 'click', this._onHeroClick);
+    }
+
+    _addEventListenersForUnitHover() {
+        Element.addListenerToNodeList(`div[data-unit-of-player="${this.playerName}"]`, 'mouseover', this._onHeroMouseEnter);
     }
 
     addEventListenersForFactions() {

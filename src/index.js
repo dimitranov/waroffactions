@@ -20,9 +20,7 @@ console.dir(elel);
 const platform = new Platform(800, 800);
 
 platform.drawMap();
-// platform.handleUnitSelectionStage(); //
 
-// platform.handleStartGame(); //
 
 
 // BUGS: 
