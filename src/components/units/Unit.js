@@ -1,32 +1,25 @@
 import ElementsUtil from '../utils/ElementsUtil.js'
-
-
-function throttle(callback, interval) {
-    let enableCall = true;
-
-    return function (...args) {
-        if (!enableCall) return;
-
-        enableCall = false;
-        callback.apply(this, args);
-        setTimeout(() => enableCall = true, interval);
-    }
-}
-
+import { throttle } from '../utils/HelperFunctions.js'
 
 export default class Unit {
-    constructor({ name, hp, baseDMG, top, left, imageURL }, platform, player) {
+    constructor(config, platform, player) {
         this.player = player;
         this.platform = platform;
 
-        this.hp = hp;
-        this.name = name;
-        this.baseDMG = baseDMG;
-        this.image = imageURL;
-        this.top = top;
-        this.left = left;
+        this.hp = config.hp;
+        this.name = config.name;
+        this.baseDMG = config.baseDMG;
+        this.image = config.imageURL;
+        this.top = config.top;
+        this.left = config.left;
         this.initialHP = this.hp; // don't change
+        this.initialBaseDMG = this.baseDMG; // don't change
         this.cord = this.top + 'x' + this.left;
+        this.spellColor = config.spellColor;
+
+        this.unitType = config.unitType;
+        this.unitSpec = config.unitSpec;
+        this.unitClass = config.unitClass;
 
         this.platform.unitsMapPosition[this.name] = this.top + 'x' + this.left;
         this.friendlyPositions = {};
@@ -36,6 +29,8 @@ export default class Unit {
         this.isFrozen = false;
         this.isPassedTurn = false;
         this.isActive = false;
+
+        this.hp -= 100;
 
         this._init();
     }
@@ -171,7 +166,7 @@ export default class Unit {
         this._handleEndTurn();
     }
 
-    _attack(target, attackType = 'male') {
+    _handleUnitActionAnimation(target, attackType) {
         switch (attackType) {
             case 'male': {
                 this.element.style.transform = `translate3d(${(target.left - this.left) * 80}px, ${(target.top - this.top) * 80}px, 0)`;
@@ -183,6 +178,7 @@ export default class Unit {
             case 'spell': {
                 const spellParticle = document.createElement('div');
                 spellParticle.classList.add('baseSpellParticle');
+                spellParticle.style.backgroundColor = this.spellColor;
                 this.element.appendChild(spellParticle);
                 setTimeout(() => {
                     spellParticle.style.transform = `translate3d(${(target.left - this.left) * 80}px, ${(target.top - this.top) * 80}px, 0)`;
@@ -194,7 +190,10 @@ export default class Unit {
                 break;
             default: { };
         }
+    }
 
+    _attack(target, attackType = 'male') {
+        this._handleUnitActionAnimation(target, attackType);
 
         target.hp -= this.baseDMG;
 
@@ -223,8 +222,10 @@ export default class Unit {
     }
 
     _onClickOnUnit = e => {
+        const ActiveUnit = this.unitsMediator.platform.getCurrentActiveUnit();
+
         if (this.isEnemy) {
-            const Attacker = this.unitsMediator.platform.getCurrentActiveUnit();
+            const Attacker = ActiveUnit; // chnage alias
             if (Attacker && this.canBeAttackedBy(Attacker)) {
                 this._takeDamageAnimation(Attacker.baseDMG);
                 Attacker._attack(this);
@@ -243,6 +244,12 @@ export default class Unit {
         if (!this.isFrozen && !this.isPassedTurn) {
             this._handleMovement();
             this.unitsMediator.notifyMediator('activated', this.name);
+        }
+
+        if (ActiveUnit && ActiveUnit._handleSpecialUnitInteraction) {
+            // can be used fo healing of buffing a frendly unit
+            ActiveUnit._handleSpecialUnitInteraction(this);
+            ActiveUnit._handleEndTurn();
         }
     }
 

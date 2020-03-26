@@ -1,11 +1,10 @@
 import Unit from './Unit.js';
 
 export default class RageUnit extends Unit {
-    constructor({ name, hp, baseDMG, top, left, imageURL }, platform, player) {
-        super({ name, hp, baseDMG, top, left, imageURL }, platform, player);
+    constructor(config, platform, player) {
+        super(config, platform, player);
 
-        this.rage = 0;
-        this.initialBaseDMG = this.baseDMG;
+        this.rage = 50;
 
         this.rageEL = document.createElement('div');
         this.rageEL.classList.add('rage');

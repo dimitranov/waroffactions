@@ -68,6 +68,7 @@ export const ASSETS = {
             spellColor: 'white',
             hp: 300,
             baseDMG: 25,
+            baseHealing: 30,
             imageURL: './images/Euvion.png',
         },
         Lemro: {
@@ -115,7 +116,8 @@ export const ASSETS = {
             unitClass: 'Range',
             spellColor: 'red',
             hp: 320,
-            baseDMG: 28,
+            baseDMG: 20,
+            baseHealing: 35,
             imageURL: './images/Rengela.png',
         }
     },
@@ -205,6 +207,7 @@ export const ASSETS = {
             spellColor: 'white',
             hp: 350,
             baseDMG: 20,
+            baseHealing: 30,
             imageURL: './images/Lightum.png',
         },
         Polonom: {
@@ -245,7 +248,8 @@ export const ASSETS = {
             unitSpec: 'Heal',
             unitClass: 'Mele',
             hp: 360,
-            baseDMG: 30,
+            baseDMG: 25,
+            baseHealing: 35,
             imageURL: './images/Amon.png',
         },
         Feror: {

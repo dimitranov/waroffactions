@@ -1,8 +1,8 @@
 import Unit from './Unit.js';
 
 export default class ManaUnit extends Unit {
-    constructor({ name, hp, baseDMG, top, left, imageURL }, platform, player) {
-        super({ name, hp, baseDMG, top, left, imageURL }, platform, player);
+    constructor(config, platform, player) {
+        super(config, platform, player);
 
         this.mana = 100;
         this.initialMana = this.mana; // never change

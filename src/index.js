@@ -1,21 +1,4 @@
 import Platform from './components/Platform.js';
-import ElementsUtil from './components/utils/ElementsUtil.js';
-// import './styles.css'
-
-const elel = ElementsUtil.div({
-    class: 'koko',
-    id: '1312',
-    dataset: {
-        koko: 1,
-        dsda: '22'
-    },
-    style: {
-        width: '300px',
-        height: '222px'
-    }
-});
-
-console.dir(elel);
 
 const platform = new Platform(800, 800);
 

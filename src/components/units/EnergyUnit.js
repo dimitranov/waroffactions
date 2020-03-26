@@ -1,11 +1,10 @@
 import Unit from './Unit.js';
 
 export default class EnergyUnit extends Unit {
-    constructor({ name, hp, baseDMG, top, left, imageURL }, platform, player) {
-        super({ name, hp, baseDMG, top, left, imageURL }, platform, player);
+    constructor(config, platform, player) {
+        super(config, platform, player);
 
         this.energy = 60;
-        this.initialDMG = baseDMG;
 
         this.energyEL = document.createElement('div');
         this.energyEL.classList.add('energy');
@@ -32,7 +31,7 @@ export default class EnergyUnit extends Unit {
         super._attack(target, 'male');
         if (this.energy >= 100) {
             this.energy = 0;
-            this.baseDMG = this.initialDMG;
+            this.baseDMG = this.initialBaseDMG;
         } else {
             this.energy += 20;
         }
