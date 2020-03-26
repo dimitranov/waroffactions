@@ -362,6 +362,13 @@ body {
     background-color: red;
 }
 
+.gridSquareHealable {
+    cursor: pointer;
+    opacity: 0.3;
+    border: 2px dashed;
+    background-color: #28ff30;
+}
+
 /* grid */
 
 /* Modal OverRides */

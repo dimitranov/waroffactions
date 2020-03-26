@@ -116,6 +116,10 @@ export default class Platform {
         this.rigthPanel.renderPanel('right');
     }
 
+    _handleGridRendered() {
+        this.gridSquares = this.platformEL.getElementsByClassName('gridSquare');
+    }
+
     unlockGame() {
         this.unitSelectionModal.close();
         this.gameLocked = false;
@@ -153,6 +157,8 @@ export default class Platform {
                 this._showMapSquares(x, y);
             }
         }
+
+        this._handleGridRendered();
     }
 }
 

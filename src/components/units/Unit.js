@@ -242,7 +242,7 @@ export default class Unit {
         }
 
         if (!this.isFrozen && !this.isPassedTurn) {
-            this._handleMovement();
+            this._initiateAroundUnitSquaresInteraction();
             this.unitsMediator.notifyMediator('activated', this.name);
         }
 
@@ -338,7 +338,7 @@ export default class Unit {
         return { allowed, targetsPositions, friendlyPositions, friendlyPositionsInScope };
     }
 
-    _handleMovement() {
+    _initiateAroundUnitSquaresInteraction() {
         const gridSquares = document.querySelectorAll('.gridSquare');
 
         for (const gridSquare of gridSquares) {
@@ -391,16 +391,13 @@ export default class Unit {
         if (this.reachableSquares) {
             for (const gridSquare of this.reachableSquares) {
                 gridSquare.style.display = 'none';
-                gridSquare.classList.remove('gridSquareSelectable');
                 gridSquare.removeEventListener('click', this._onMove, false);
             }
         }
 
-        if (this.reachableSquaresAttackable) {
-            for (const gridSquare of this.reachableSquaresAttackable) {
-                gridSquare.classList.remove('gridSquareAttackable');
-            }
-        }
+        Array.from(this.platform.gridSquares).forEach(square => {
+            square.className = 'gridSquare';
+        });
 
         this._onMovementEnd();
     }

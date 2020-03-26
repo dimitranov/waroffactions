@@ -18,6 +18,7 @@ export default class HealUnit extends ManaUnit {
                 currentTargetHP = Target.initialHP;
             }
 
+            // perform heal
             Target.hp = currentTargetHP;
             this.mana -= BASE_HEAL_COST;
 
@@ -27,12 +28,15 @@ export default class HealUnit extends ManaUnit {
             Target.updateStatBars();
             this.updateStatBars();
         }
-        console.log(this, Target);
     }
 
-    _handleMovement() {
-        super._handleMovement();
-        const positions = this._getFormatedAroundUnitPositions(this.top, this.left);
-        console.log(positions);
+    _initiateAroundUnitSquaresInteraction() {
+        super._initiateAroundUnitSquaresInteraction();
+        const friendlyPositionsInScope = this._getFormatedAroundUnitPositions(this.top, this.left).friendlyPositionsInScope;
+        
+        for (const cord of friendlyPositionsInScope) {
+            const friendlyGridCell = document.querySelector(`.gridSquare[data-top="${cord[0]}"][data-left="${cord[2]}"]`);
+            friendlyGridCell.classList.add('gridSquareHealable');
+        }
     }
 }
