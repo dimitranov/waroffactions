@@ -29,4 +29,10 @@ export default class HealUnit extends ManaUnit {
         }
         console.log(this, Target);
     }
+
+    _handleMovement() {
+        super._handleMovement();
+        const positions = this._getFormatedAroundUnitPositions(this.top, this.left);
+        console.log(positions);
+    }
 }

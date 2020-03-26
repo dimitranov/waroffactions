@@ -329,16 +329,13 @@ export default class Unit {
     _getFormatedAroundUnitPositions(top, left) {
         const aroundUnitPosition = this._getAroundUnitPositions(top, left); // all cords around unit
         const otherUnitsPosition = Object.values(this._getOtherUnits()); // all units without current cords
+        const allowed = aroundUnitPosition.filter(value => otherUnitsPosition.indexOf(value) === -1); // all cords that the nit can move to
+        const friendlyPositions = this.unitsMediator.getFriendlyUnitsCords(this.name); // all friendly units
+        const unitsInReachCords = aroundUnitPosition.filter(value => otherUnitsPosition.indexOf(value) > -1); // all units in reach
+        const friendlyPositionsInScope = unitsInReachCords.filter(value => friendlyPositions.indexOf(value) > -1); // all friendly units in reach
+        const targetsPositions = unitsInReachCords.filter(value => friendlyPositions.indexOf(value) === -1); // all enemy units in reach
 
-        const allowed = aroundUnitPosition.filter(value => otherUnitsPosition.indexOf(value) === -1);
-
-        const friendlyPositions = this.unitsMediator.getFriendlyUnitsCords(this.name);
-
-        let targetsPositions = aroundUnitPosition.filter(value => otherUnitsPosition.indexOf(value) > -1);
-
-        targetsPositions = targetsPositions.filter(value => friendlyPositions.indexOf(value) === -1);
-
-        return { allowed, targetsPositions, friendlyPositions };
+        return { allowed, targetsPositions, friendlyPositions, friendlyPositionsInScope };
     }
 
     _handleMovement() {
