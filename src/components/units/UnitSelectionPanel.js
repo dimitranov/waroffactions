@@ -57,14 +57,19 @@ export default class UnitSelectionPanel {
     _renderUnitsPool(faction) {
         let unitsEls = '';
 
-        for (const unit of Object.keys(ASSETS[faction])) {
-            if (unit === 'base') {
+        for (const key of Object.keys(ASSETS[faction])) {
+            const unit = ASSETS[faction][key];
+            if (key === 'base') {
                 continue;
             }
             unitsEls += `
-                <div class="poolFaction" data-unit-of-player="${this.playerName}" data-unit-name="${unit}">
-                    <img src="./images/${unit}.png"/>
-                    <p>${unit}</p>
+                <div class="poolFaction"
+                    data-unit-of-player="${this.playerName}"
+                    data-unit-name="${unit.name}"
+                    data-unit-spec="${unit.unitSpec}"
+                    data-unit-class="${unit.unitClass}">
+                    <img src="./images/${unit.name}.png"/>
+                    <p>${unit.name}</p>
                 </div>
             `;
         }
@@ -77,7 +82,8 @@ export default class UnitSelectionPanel {
             <h1>${this.playerName}</h1>
             <div class="pool">
                 ${this._renderFactionsPool()}
-                <button class="button-main button-blue button-small lockSelectionBTN" data-lock-selected-faction="${this.playerName}">PICK</button> 
+                <button class="button-main button-blue button-small lockSelectionBTN" data-lock-selected-faction="${this.playerName}">PICK</button>
+                <div class="units-panel-details-panel faction ${this.playerName}"></div>
             </div>
         `;
     }
@@ -89,8 +95,7 @@ export default class UnitSelectionPanel {
             <div class="pool">
                 ${!this.locked ? this._renderUnitsPool(this.currentSelectedFaction) : this._renderLockedPanel()}
                 ${!this.locked ? `<button class="button-main button-green button-small lockSelectionBTN" data-lock-selected-hero="${this.playerName}">LOCK</button>` : ''}
-                <div class="unit-details-panel ${this.playerName}"></div>
-                ${this._renderHeroDeatailsPanel()}
+                <div class="units-panel-details-panel units ${this.playerName}"></div>
             </div>
         `;
     }
@@ -104,6 +109,24 @@ export default class UnitSelectionPanel {
             <p><span>HP:</span> ${unitData.hp}</p>
             <p><span>DMG:</span> ${unitData.baseDMG}</p>
         `;
+    }
+
+    _renderFactionDeatailsPanel(faction) {
+        if (!faction) return '';
+        let html = '';
+        if (faction.countering.length > 0) {
+            html += '<p><span class="countering">Countering</span></p>';
+        }
+        for (const fac of faction.countering) {
+            html += `<p>${fac}</p>`;
+        }
+        if (faction.counters.length > 0) {
+            html += '<p><span class="counters">Counters</span></p>';
+        }
+        for (const fac of faction.counters) {
+            html += `<p>${fac}</p>`;
+        }
+        return html;
     }
 
     // actions
@@ -141,12 +164,24 @@ export default class UnitSelectionPanel {
         }
         const unitName = e.currentTarget.dataset.unitName;
         const unitData = ASSETS[this.currentSelectedFaction][unitName];
-        const panel = document.querySelector(`.unit-details-panel.${this.playerName}`);
+        const panel = document.querySelector(`.units-panel-details-panel.units.${this.playerName}`);
         panel.innerHTML = this._renderHeroDeatailsPanel(unitData);
         this.detailsClearTimeout = setTimeout(() => {
             panel.innerHTML = '';
-        }, 2000);
+        }, 4000);
+    }
 
+    _onFactionMouseEnter = e => {
+        if (this.detailsClearTimeout) {
+            clearTimeout(this.detailsClearTimeout)
+        }
+        const factionName = e.currentTarget.dataset.faction;
+        const factionData = Object.values(ASSETS[factionName])[1];
+        const panel = document.querySelector(`.units-panel-details-panel.faction.${this.playerName}`);
+        panel.innerHTML = this._renderFactionDeatailsPanel(factionData);
+        this.detailsClearTimeout = setTimeout(() => {
+            panel.innerHTML = '';
+        }, 4000);
     }
 
     _onLock_faction = () => {
@@ -206,6 +241,11 @@ export default class UnitSelectionPanel {
     addEventListenersForFactions() {
         Element.addListenerToNodeList(`div[data-faction-of-player="${this.playerName}"]`, 'click', this._onFactionClick);
         this._addEventListenerForLock('faction');
+        this._addEventListenersForFactionHover();
+    }
+
+    _addEventListenersForFactionHover() {
+        Element.addListenerToNodeList(`div[data-faction-of-player="${this.playerName}"]`, 'mouseover', this._onFactionMouseEnter);
     }
 
     // behaviour

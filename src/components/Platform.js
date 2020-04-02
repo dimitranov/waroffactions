@@ -1,15 +1,9 @@
-import UnitSelectionPanel from './units/UnitSelectionPanel.js';
 import UnitsMediator from './units/UnitsMediator.js';
 import UnitBuilder from './units/UnitBuilder.js';
 import UnitSelectionModal from './units/UnitSelectionModal.js';
+
 import PlayerMediator from './players/PlayerMediator.js';
 import PlayerRegistrationModal from './players/PlayerRegistrationModal.js';
-
-
-import ModalUtil from './utils/ModalUtil.js';
-import Element from './utils/ElementsUtil.js';
-
-
 import PlayerPanel from './players/PlayerPanel.js';
 
 export default class Platform {
@@ -31,7 +25,6 @@ export default class Platform {
         this.unitMediatorMap = {};
         this.UnitBuilder = new UnitBuilder();
         this._initPlayerRegistrationModal();
-
     }
 
     handleStartGame() {
@@ -40,19 +33,9 @@ export default class Platform {
 
             this.playerUnitsArrayMap[this.playerMediator.activePlayer.name] = this.playerMediator.activePlayer.units;
             this.playerUnitsArrayMap[this.playerMediator.enemyPlayer.name] = this.playerMediator.enemyPlayer.units;
-            // this.playerMediator.anounceVictory('Dimi');
-            // this.playerUnitsArrayMap = {
-            //     Dimi: ["Urvald", "Mormond"],
-            //     Georgi: ["Euvion", "Lemro"],
-            // };
 
             const activePlayer = this.playerMediator.activePlayer;
             const enemyPlayer = this.playerMediator.enemyPlayer;
-
-            // activePlayer.units = ["Urvald", "Mormond"];
-            // enemyPlayer.units = ["Euvion", "Lemro"];
-            // activePlayer.unitsAlive = ["Urvald", "Mormond"];
-            // enemyPlayer.unitsAlive = ["Euvion", "Lemro"];
 
             for (const playerName in this.playerUnitsArrayMap) {
                 // create the mediator
@@ -134,6 +117,31 @@ export default class Platform {
     }
 
     _activateGameStartAnimation() {
+        let count = 3;
+        const timerEL = document.createElement('div');
+        timerEL.id = 'game-start-counter';
+        this.platformEL.parentElement.appendChild(timerEL);
+        var startDate = new Date();
+        const countDown = () => {
+            if (count === -1) {
+                timerEL.remove();
+                console.log(new Date().getTime() - startDate);
+                clearInterval(this.gameStartTimer);
+                return;
+            }
+            if (count === 0) {
+                timerEL.textContent = 'START';
+            } else {
+                timerEL.textContent = count;
+            }
+            count -= 1;
+            if (count < 0) {
+                timerEL.textContent = 'START';
+            }
+        }
+
+        countDown();
+        this.gameStartTimer = setInterval(countDown, 1000);
         this.platformEL.classList.add('platformFadeIn');
     }
 
@@ -161,94 +169,3 @@ export default class Platform {
         this._handleGridRendered();
     }
 }
-
-
-// TASKS:
-// disable PLAY button untill all player have locked there nits
-// make the unit counter
-// make little icons indication  what type of unit is the selectable unit
-// 1. Make visual changes to friendly units when close to each other
-// 2. Make atacking possible
-// 3. add more assets and export units configs in assetsJs file
-
-
-// const data = {
-//     isDAWProduct: false,
-//     priorityDesignChange: 'true',
-//     optionsType: 'FOIL_COLOR',
-//     numOfOptions: 1,
-//     options: [{
-//         label: 'FORMAT',
-//         type: 'CARD_SIZE',
-//     }]
-// };
-
-
-// 1. zadacha: Da se console logne optionsType na data
-// // data.optionsType
-// 2. zadacha: Da se console.log label na purviq options
-// // data.options[0].label
-
-// const data = {
-//     competitors: [{
-//         class: 'X',
-//         type: 'X1',
-//         people: [{
-//             name: 'Georgi',
-//             score: '22'
-//         }]
-//     }, {
-//         class: 'Y',
-//         type: 'Y1',
-//         people: [{
-//             name: 'Dani',
-//             score: 33
-//         }, {
-//             name: 'Dimi',
-//             score: 51
-//         }]
-//     }]
-// };
-
-// 3. zadacha: Da se console logne - imaeto na 2 - viq compoetitor ot class Y
-// // data.competitors[1].people[1].name
-// 4. zadacha: Da se console logne - scora na 1-viq compoetitor ot class X
-// // data.competitors[0].people[0].score
-
-
-// const data = {
-//     addons: {
-//         first: [{
-//             label: 'X',
-//             type: 'X1',
-//         }, {
-//             label: 'Y',
-//             type: 'Y1',
-//             values: [{
-//                 data: {
-//                     name: 'Georgi',
-//                     gender: 'male',
-//                     favNumbers: [ 3, 7, 24 ]
-//                 },
-//             }, {
-//                 data: {
-//                     name: 'Dimi',
-//                     gender: 'female',
-//                     favNumbers: [44, 66, 12],
-//                     hobis: {
-//                         first: 'read book',
-//                         second: 'eat',
-//                         third: 'play with dog'
-//                     }
-//                 },
-//             }]
-//         }]
-//     }
-// };
-
-// 5 zadacha: da se console  logne -> 2 - roto lubimo chislo na Dimi
-// // data.addons.first[1].values[1].data.favNumbers[1]
-// 6 zadacha: da se console  logne -> genders na Georgi
-// // data.addons.first[1].values[0].data.gender
-// 7 zadacha: da se console  logne -> 3 - toto hobi na Dimi
-// // data.addons.first[1].values[1].data.hobis.third

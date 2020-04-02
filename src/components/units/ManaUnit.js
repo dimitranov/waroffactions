@@ -4,13 +4,15 @@ export default class ManaUnit extends Unit {
     constructor(config, platform, player) {
         super(config, platform, player);
 
-        this.mana = 100;
+        this.MAX_MANA = 100;
+        this.MANA_INC = 10;
+
+        this.mana = this.MAX_MANA;
         this.initialMana = this.mana; // never change
         this.initialBaseDMG = this.baseDMG;
 
         this.manaEL = document.createElement('div');
-        this.manaEL.classList.add('mana');
-        this.manaEL.classList.add('secondaryStatEl');
+        this.manaEL.classList.add('mana', 'secondaryStatEl', 'max');
         this.updateManaBar();
 
         this.updateEnchancedDetail();
@@ -43,6 +45,7 @@ export default class ManaUnit extends Unit {
         super._attack(target, 'spell');
         if (this.mana > 1) {
             this.mana -= 20;
+            this.manaEL.classList.remove('max');
             if (this.mana < 1) {
                 this.mana = 0;
             }
@@ -53,9 +56,15 @@ export default class ManaUnit extends Unit {
 
     _updatePosition = (newCords) => {
         super._updatePosition(newCords);
-        const manaGain = 10;
-        if (this.mana !== 100) {
-            this.mana += manaGain;
+        if (this.mana !== this.MAX_MANA) {
+            this.manaEL.classList.remove('max');
+            const newMana = this.mana + this.MANA_INC;
+            if (newMana >= this.MAX_MANA) {
+                this.mana = this.MAX_MANA;
+                this.manaEL.classList.add('max');
+            } else {
+                this.mana = newMana;
+            }
         }
         this.updateDMG();
         this.updateStatBars();

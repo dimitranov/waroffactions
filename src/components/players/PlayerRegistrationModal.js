@@ -39,18 +39,24 @@ export default class PlayerRegistrationModal {
     }
 
     submitPlayerInfo = () => {
-        const p1 = document.getElementById('player_1_input');
-        const p2 = document.getElementById('player_2_input');
+        const p1 = document.getElementById('player_1_input').value;
+        const p2 = document.getElementById('player_2_input').value;
 
-        if (p1.value && p2.value) {
-            if (p1.value !== p2.value) {
-                this.platform.initPlayerMediator([p1.value, p2.value]);
-            } else {
-                this.modal.showValidationError('Names must be different.');
-            }
-
-        } else {
+        if (!p1 || !p2) {
             this.modal.showValidationError('Please write 2 names.');
+            return;
         }
+
+        if (p1 === p2) {
+            this.modal.showValidationError('Names must be different.');
+            return;
+        }
+
+        if (/^\d/.test(p1) || /^\d/.test(p2)) {
+            this.modal.showValidationError('Names cant start with a number.');
+            return;
+        }
+
+        this.platform.initPlayerMediator([p1, p2]);
     }
 }

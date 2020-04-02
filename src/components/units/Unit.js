@@ -16,6 +16,9 @@ export default class Unit {
         this.initialBaseDMG = this.baseDMG; // don't change
         this.cord = this.top + 'x' + this.left;
         this.spellColor = config.spellColor;
+        this.faction = config.faction;
+        this.countering = config.countering;
+        this.counters = config.counters;
 
         this.unitType = config.unitType;
         this.unitSpec = config.unitSpec;
@@ -29,8 +32,6 @@ export default class Unit {
         this.isFrozen = false;
         this.isPassedTurn = false;
         this.isActive = false;
-
-        this.hp -= 100;
 
         this._init();
     }
@@ -68,8 +69,8 @@ export default class Unit {
             }
         });
 
-        this.takeDamageEL = ElementsUtil.div({
-            class: 'takeDamageEL',
+        this.actionAmountEL = ElementsUtil.div({
+            class: 'actionAmountEL',
         });
 
 
@@ -81,7 +82,7 @@ export default class Unit {
         this.details = this._getGeneralDetails(this);
         this._setDetailsContentToElement();
 
-        this.element.append(this.imgEL, this.healthEL, this.detailsEL, this.takeDamageEL);
+        this.element.append(this.imgEL, this.healthEL, this.detailsEL, this.actionAmountEL);
 
         this.platform.platformEL.appendChild(this.element);
     }
@@ -131,12 +132,13 @@ export default class Unit {
         }
     }
 
-    _takeDamageAnimation(damage) {
-        this.takeDamageEL.textContent = damage;
-        this.takeDamageEL.classList.add('takeDamageEL_animation');
+    _actionAmountAnimation(type, amount) {
+        const symbol = type === 'damage' ? '-' : '+';
+        this.actionAmountEL.textContent = symbol + amount;
+        this.actionAmountEL.classList.add('actionAmountEL_animation', type);
         setTimeout(() => {
-            this.takeDamageEL.textContent = '';
-            this.takeDamageEL.classList.remove('takeDamageEL_animation');
+            this.actionAmountEL.textContent = '';
+            this.actionAmountEL.classList.remove('actionAmountEL_animation', type);
         }, 600);
     }
 
@@ -160,7 +162,6 @@ export default class Unit {
             this.left = newLeft;
             this.cord = this.top + 'x' + this.left;
             this.platform.unitsMapPosition[this.name] = newTop + 'x' + newLeft;
-            this.platform.notifyFor
         }
 
         this._handleEndTurn();
@@ -193,9 +194,19 @@ export default class Unit {
     }
 
     _attack(target, attackType = 'male') {
-        this._handleUnitActionAnimation(target, attackType);
+        let bonusDMG = 0;
 
-        target.hp -= this.baseDMG;
+        if (this.countering.indexOf(target.faction) > -1) {
+            const randomPercentage = parseFloat((Math.random() * (0.1 - 0.2) + 0.2).toFixed(2));
+            bonusDMG = this.baseDMG * randomPercentage;
+        }
+
+        const healthDelta = Math.floor(this.baseDMG + bonusDMG);
+
+        this._handleUnitActionAnimation(target, attackType);
+        target._actionAmountAnimation('damage', healthDelta);
+
+        target.hp -= healthDelta;
 
         if (target.hp <= 0) {
             target._die();
@@ -210,6 +221,7 @@ export default class Unit {
                     this.platform.playerMediator.anounceVictory(this.player);
                 }, 1500);
             }
+            return;
         } else {
             target.element.classList.add('takeDamage');
             setTimeout(() => {
@@ -227,7 +239,6 @@ export default class Unit {
         if (this.isEnemy) {
             const Attacker = ActiveUnit; // chnage alias
             if (Attacker && this.canBeAttackedBy(Attacker)) {
-                this._takeDamageAnimation(Attacker.baseDMG);
                 Attacker._attack(this);
                 setTimeout(() => {
                     Attacker._handleEndTurn();
@@ -271,8 +282,8 @@ export default class Unit {
     _getGeneralDetails(data) {
         return `
             <p class="stat name">${data.name}</p>
-            <p class="stat"><span>HP:</span> ${data.hp}/${data.initialHP}</p> 
-            <p class="stat"><span>DMG:</span> ${data.baseDMG}</p> 
+            <p class="stat"><span>HP:</span> ${Math.floor(data.hp)}/${data.initialHP}</p> 
+            <p class="stat"><span>DMG:</span> ${Math.floor(data.baseDMG)}</p> 
         `;
     }
 

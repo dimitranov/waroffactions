@@ -42,20 +42,10 @@ class ElementsUtil {
         return result;
     }
 
-    remove(element) {
-
-    }
-
     createMethod = (methodName) => {
         return (options, html) => {
             return new ElementFactory(methodName, options, html);
         }
-    }
-
-    on(query, action, cb) {
-        // if () {
-
-        // }
     }
 
     addListenerToNodeList(listSelector, event, callback) {

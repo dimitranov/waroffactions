@@ -1,4 +1,3 @@
-import { ASSETS } from '../../assetsMap.js';
 
 export default class PlayerPanel {
     constructor(player, platform) {

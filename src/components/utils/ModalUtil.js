@@ -18,10 +18,10 @@ export default class ModalUtil {
             }, errMgs);
             this.modalEl.appendChild(this.validationError);
             this.errorShown = true;
-            setTimeout(() => {
-                this.modalEl.removeChild(this.validationError);
-                this.errorShown = false;
-            }, 4000);
+            // setTimeout(() => {
+            //     this.modalEl.removeChild(this.validationError);
+            //     this.errorShown = false;
+            // }, 4000);
         }
     }
 
