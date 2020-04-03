@@ -21,7 +21,7 @@ export default class EnergyUnit extends Unit {
     }
 
     updateEnergyBarHeight() {
-        this.energyEL.style.height = this.energy + 'px';
+        this.energyEL.style.height = 70 * this.energy / 100 + 'px';
     }
 
     updateStatBars() {

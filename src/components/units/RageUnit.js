@@ -22,7 +22,7 @@ export default class RageUnit extends Unit {
     }
 
     _updateRageBarHeight() {
-        this.rageEL.style.height = this.rage + 'px';
+        this.rageEL.style.height = 70 * this.rage / 100 + 'px';
     }
 
     updateStatBars() {
